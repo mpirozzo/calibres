@@ -465,6 +465,7 @@ body:has(.overlay.on) .printfloat{display:inline-flex}
       <button class="guidebtn" data-g="nomen" style="--ac:var(--brass-d)"><span class="garr">›</span><span class="gk"><span class="l-es">Del libro</span><span class="l-en">From the book</span></span><span class="gt"><span class="l-es">Nomenclatura</span><span class="l-en">Nomenclature</span></span><span class="gd"><span class="l-es">Cómo se nombran los cartuchos</span><span class="l-en">How cartridges are named</span></span></button>
       <button class="guidebtn" data-g="ident" style="--ac:var(--brass-d)"><span class="garr">›</span><span class="gk"><span class="l-es">Del libro</span><span class="l-en">From the book</span></span><span class="gt"><span class="l-es">Identificar un cartucho</span><span class="l-en">Identify a cartridge</span></span><span class="gd"><span class="l-es">Headstamp, culote y medidas</span><span class="l-en">Headstamp, rim and measuring</span></span></button>
       <button class="guidebtn" data-g="histo" style="--ac:var(--copper)"><span class="garr">›</span><span class="gk"><span class="l-es">Del libro</span><span class="l-en">From the book</span></span><span class="gt"><span class="l-es">Historia del cartucho</span><span class="l-en">History of the cartridge</span></span><span class="gd"><span class="l-es">De la pólvora negra a hoy</span><span class="l-en">From black powder to today</span></span></button>
+      <button class="guidebtn" data-g="term" style="--ac:var(--militar)"><span class="garr">›</span><span class="gk"><span class="l-es">Referencia</span><span class="l-en">Reference</span></span><span class="gt"><span class="l-es">Balística terminal</span><span class="l-en">Terminal ballistics</span></span><span class="gd"><span class="l-es">Penetración, expansión y poder de detención</span><span class="l-en">Penetration, expansion &amp; stopping power</span></span></button>
       <button class="guidebtn" data-g="calc" style="--ac:var(--escopeta)"><span class="garr">›</span><span class="gk"><span class="l-es">Herramienta</span><span class="l-en">Tool</span></span><span class="gt"><span class="l-es">Calculadora de caza</span><span class="l-en">Hunting calculator</span></span><span class="gd"><span class="l-es">Buscar municiones por criterio</span><span class="l-en">Find loads by criteria</span></span></button>
       <button class="guidebtn" data-g="lab" style="--ac:var(--varmint)"><span class="garr">›</span><span class="gk"><span class="l-es">Herramienta</span><span class="l-en">Tool</span></span><span class="gt"><span class="l-es">Laboratorio balístico</span><span class="l-en">Ballistics lab</span></span><span class="gd"><span class="l-es">Comparar y simular impacto</span><span class="l-en">Compare &amp; simulate impact</span></span></button>
       <button class="guidebtn" data-g="nine" style="--ac:var(--pistola)"><span class="garr">›</span><span class="gk"><span class="l-es">Artículo</span><span class="l-en">Feature</span></span><span class="gt"><span class="l-es">El 9 mm, número uno</span><span class="l-en">The 9mm, No. 1</span></span><span class="gd"><span class="l-es">Por qué le ganó al .40 y al .45</span><span class="l-en">Why it beat the .40 and .45</span></span></button>
@@ -538,6 +539,8 @@ body:has(.overlay.on) .printfloat{display:inline-flex}
           <li><b>cartridgecollectors.org</b> — <span class="l-es">códigos de culote (headstamp), base internacional.</span><span class="l-en">international headstamp-code database.</span> <a href="https://cartridgecollectors.org/headstamp-codes/" target="_blank" rel="noopener">cartridgecollectors.org/headstamp-codes</a></li>
           <li><b>SAAMI</b> — <span class="l-es">normas de cartuchos (dimensiones y presiones).</span><span class="l-en">cartridge standards (dimensions and pressures).</span> <a href="https://saami.org" target="_blank" rel="noopener">saami.org</a></li>
           <li><b><span class="l-es">Datos de recarga de fabricantes</span><span class="l-en">Manufacturer reloading data</span></b> — Hornady (<a href="https://www.hornady.com" target="_blank" rel="noopener">hornady.com</a>), Nosler (<a href="https://www.nosler.com" target="_blank" rel="noopener">nosler.com</a>), Vihtavuori (<a href="https://www.vihtavuori.com" target="_blank" rel="noopener">vihtavuori.com</a>).</li>
+          <li><b>BrassFetcher</b> — <span class="l-es">testeo de balística terminal (gelatina, protocolo FBI).</span><span class="l-en">terminal-ballistics testing (gelatin, FBI protocol).</span> <a href="https://www.brassfetcher.com/" target="_blank" rel="noopener">brassfetcher.com</a></li>
+          <li><b>The Box O' Truth</b> — <span class="l-es">penetración de munición a través de barreras.</span><span class="l-en">ammo penetration through barriers.</span> <a href="http://www.theboxotruth.com/" target="_blank" rel="noopener">theboxotruth.com</a></li>
           <li><b>municion.org</b> — <span class="l-es">base de datos y coleccionismo de cartuchería (AECC, España).</span><span class="l-en">cartridge database and collecting (AECC, Spain).</span> <a href="https://municion.org" target="_blank" rel="noopener">municion.org</a></li>
           <li><b>HandgunHero</b> — <span class="l-es">comparador visual de munición y armas cortas.</span><span class="l-en">visual cartridge &amp; handgun comparison.</span> <a href="https://www.handgunhero.com/" target="_blank" rel="noopener">handgunhero.com</a></li>
         </ul>
@@ -1899,6 +1902,9 @@ const tr = {
   sortDir:{es:"Invertir orden",en:"Reverse order"},
   recoilLabel:{es:"Retroceso relativo",en:"Relative recoil"},
   recoilNote:{es:"Proporcional al impulso de la bala (masa × velocidad). El retroceso que se siente también depende del peso del arma.",en:"Proportional to the bullet's momentum (mass × velocity). Felt recoil also depends on the firearm's weight."},
+  penLabel:{es:"Penetración (densidad seccional)",en:"Penetration (sectional density)"},
+  penWords:{es:["bajo","medio","alto"],en:["low","medium","high"]},
+  penNote:{es:"La densidad seccional estima el potencial de penetración a igual construcción de bala; el tipo de bala (FMJ, JHP, sólida) pesa más que el calibre.",en:"Sectional density estimates penetration potential at equal bullet construction; the bullet type (FMJ, JHP, solid) matters more than the caliber."},
   quizBtn:{es:"◎ Práctica",en:"◎ Practice"},
   quizTitle:{es:"Modo práctica",en:"Practice mode"},
   quizHint:{es:"Tocá tu elección.",en:"Tap your choice."},
@@ -2277,6 +2283,9 @@ function openDetail(i,fc){
       ${c.m!=null?`<div class="sec">${tr.recoilLabel[lang]}</div>
       <div class="recoil"><div class="rbar"><div class="rfill" style="width:${Math.round(recoil(c)/RMAX*100)}%"></div></div><div class="rval">${recoil(c).toFixed(1)} N·s</div></div>
       <p class="rnote">${tr.recoilNote[lang]}</p>`:""}
+      ${c.m!=null?`<div class="sec">${tr.penLabel[lang]}</div>
+      <div class="recoil"><div class="rbar"><div class="rfill" style="width:${Math.round(sdPct(c))}%"></div></div><div class="rval">${sd(c).toFixed(3)} · ${tr.penWords[lang][penLevel(sd(c))]}</div></div>
+      <p class="rnote">${tr.penNote[lang]}</p>`:""}
 
       <div class="sec">${tr.secUse[lang]}</div>
       <p class="uses">${pick(c.use)}</p>
@@ -2338,6 +2347,9 @@ ov2.addEventListener("click",e=>{if(e.target===ov2)closeWeapon();});
 const GR2KG=0.00006479891;
 function recoil(c){return c.m!=null?c.m*GR2KG*c.vel:null;}
 const RMAX=Math.max.apply(null,C.filter(c=>c.m!=null).map(c=>recoil(c)));
+function sd(c){return c.m!=null&&c.din?(c.m/7000)/(c.din*c.din):null;}
+function sdPct(c){const s=sd(c);return s==null?0:Math.max(4,Math.min(100,(s-0.10)/0.23*100));}
+function penLevel(s){return s<0.17?0:(s<0.25?1:2);}
 const quizBtn=document.getElementById("quizBtn"), ovq=document.getElementById("ovq"), panelq=document.getElementById("panelq");
 const QPOOL=C.map((c,i)=>i).filter(i=>!C[i].shell);
 const QMETRICS=["dmm","E","vel","yr"];
@@ -2454,6 +2466,8 @@ const CITE={es:'Información basada en las secciones «Cartridge Nomenclature»,
 const CITE9={es:'Información basada en el artículo «How the 9mm Became No. 1», de Robert A. Sadowski, en <i>Cartridges of the World</i>, 18.ª edición (Gun Digest Books · Caribou Media Group, 2026). Texto reelaborado y traducido.',en:'Based on “How the 9mm Became No. 1,” by Robert A. Sadowski, in <i>Cartridges of the World</i>, 18th Edition (Gun Digest Books · Caribou Media Group, 2026). Text reworked and translated.'};
 
 const HSDIAG='<svg viewBox="0 0 300 234" xmlns="http://www.w3.org/2000/svg"><circle cx="150" cy="116" r="98" fill="#0e1116" stroke="#3a352b" stroke-width="2"/><circle cx="150" cy="116" r="94" fill="none" stroke="#c9a24c" stroke-width="2" opacity="0.45"/><circle cx="150" cy="116" r="86" fill="#13171e" stroke="#272d38" stroke-width="1.5"/><circle cx="150" cy="116" r="27" fill="#1b2029" stroke="#5a5346" stroke-width="2"/><circle cx="150" cy="116" r="3.2" fill="#3a352b"/><text x="150" y="60" fill="#e9e7e1" font-family="ui-monospace,monospace" font-size="23" font-weight="700" text-anchor="middle" letter-spacing="4">LC</text><text x="150" y="190" fill="#e9e7e1" font-family="ui-monospace,monospace" font-size="23" font-weight="700" text-anchor="middle" letter-spacing="4">67</text><text x="74" y="126" fill="#5fb0a8" font-family="ui-monospace,monospace" font-size="27" font-weight="700" text-anchor="middle">+</text><text x="150" y="18" fill="#c9a24c" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">12 h</text><text x="268" y="120" fill="#6f6b63" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">3 h</text><text x="150" y="230" fill="#c9a24c" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">6 h</text><text x="32" y="120" fill="#5fb0a8" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">9 h</text></svg>';
+const CITETERM={es:'Información de balística terminal basada en el protocolo de prueba de munición del FBI y en los ensayos de <a href="https://www.brassfetcher.com/" target="_blank" rel="noopener">BrassFetcher</a> (gelatina balística) y <a href="http://www.theboxotruth.com/" target="_blank" rel="noopener">The Box O\' Truth</a> (penetración en barreras). Texto educativo, no asesoramiento; el diagrama es propio y genérico.',en:'Terminal-ballistics information based on the FBI ammunition test protocol and on the tests by <a href="https://www.brassfetcher.com/" target="_blank" rel="noopener">BrassFetcher</a> (ballistic gelatin) and <a href="http://www.theboxotruth.com/" target="_blank" rel="noopener">The Box O\' Truth</a> (barrier penetration). Educational text, not advice; the diagram is original and generic.'};
+const TERMDIAG='<svg viewBox="0 0 360 168" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,monospace"><rect x="18" y="26" width="326" height="100" rx="5" fill="#0c0e12" stroke="#272d38" stroke-width="1.5"/><rect x="214" y="26" width="104" height="100" fill="#5fb0a8" opacity="0.10"/><line x1="214" y1="26" x2="214" y2="126" stroke="#5fb0a8" stroke-opacity="0.45" stroke-dasharray="3 3"/><line x1="318" y1="26" x2="318" y2="126" stroke="#5fb0a8" stroke-opacity="0.45" stroke-dasharray="3 3"/><text x="266" y="19" fill="#5fb0a8" font-size="10" text-anchor="middle">FBI 30–46 cm</text><ellipse cx="120" cy="76" rx="88" ry="38" fill="#cf6b63" opacity="0.14"/><path d="M20,76 Q60,58 120,62 Q200,68 252,76 Q200,84 120,90 Q60,94 20,76 Z" fill="#9c3b30" opacity="0.6"/><path d="M250,69 Q262,68 263,76 Q262,84 250,83 L244,81 L244,71 Z" fill="#b5754a" stroke="#3a2113" stroke-width="0.8"/><path d="M3,76 L16,72 L16,80 Z" fill="#e9e7e1"/><line x1="18" y1="140" x2="344" y2="140" stroke="#3a3a3a" stroke-width="1"/><g fill="#6f6b63" font-size="10" text-anchor="middle"><text x="18" y="156">0</text><text x="116" y="156">15</text><text x="214" y="156">30</text><text x="318" y="156">46</text><text x="340" y="156">cm</text></g></svg>';
 const GUIDE={
  nomen:{rk:{es:"Referencia · Nomenclatura",en:"Reference · Nomenclature"},h2:{es:"Nomenclatura de cartuchos",en:"Cartridge nomenclature"},cite:CITE,body:{
   es:`<p class="gp">La forma de nombrar a los cartuchos es célebre por su falta de lógica. Más que un sistema, es un código heredado de siglo y medio de tradiciones cruzadas: lo que en un nombre son milímetros, en otro son centésimas de pulgada, un año o una carga de pólvora que ya nadie usa.</p>
@@ -2744,6 +2758,49 @@ const GUIDE={
    <p class="gp">The .375 H&H's reinforcing belt (1912) opened the magnum era; Charles Newton was ahead of his time around 1910. After the war came the hunting magnums, and in the 21st century the high-efficiency <b>short magnums</b>, <b>Creedmoors</b> and <b>PRCs</b>, plus cases of new materials like the steel of the 7 mm Backcountry.</p>
    <div class="sec">A living work</div>
    <p class="gp">This very reference embodies that history. Frank C. Barnes began collecting cartridge data around 1930, at age twelve, and published the first edition of <i>Cartridges of the World</i> in 1965, conceived as a practical guide covering "all the cartridges that count." Barnes died in 1992 and the work kept growing: this 18th Edition (2026), 720 pages, is in the care of W. Todd Woodard.</p>`}},
+ term:{rk:{es:"Referencia · Balística terminal",en:"Reference · Terminal ballistics"},h2:{es:"Balística terminal y poder de detención",en:"Terminal ballistics & stopping power"},cite:CITETERM,body:{
+  es:`<p class="gp">La balística <b>terminal</b> es lo que ocurre cuando la bala impacta —distinta de la externa (velocidad, energía, trayectoria)—. Se resume en dos preguntas: cuánto <b>penetra</b> y cuánto <b>abre</b>.</p>
+   <div class="sec">El protocolo FBI</div>
+   <p class="gp">Es el estándar para munición de pistola. Se dispara en <b>gelatina balística</b> al 10&nbsp;% y se busca una penetración de <b>30 a 46&nbsp;cm (12–18″)</b>, probando en gel desnudo y a través de barreras: ropa pesada, chapa de acero, panel de yeso, madera terciada y vidrio de auto. La meta es alcanzar los órganos vitales aun cruzando un brazo o una barrera, sin sobrepenetrar.</p>
+   <div class="gdiagram">${TERMDIAG}</div>
+   <p class="gcap">Canal de herida: la cavidad permanente (rojo) dentro de la cavidad temporal (estiramiento), y la profundidad alcanzada</p>
+   <div class="sec">Penetración vs expansión</div>
+   <p class="gp">Hay un compromiso. Una bala que se <b>expande</b> (punta hueca, JHP) abre una herida más ancha pero penetra menos; una que <b>no</b> se expande (FMJ, sólida) penetra profundo y angosto —y suele sobrepenetrar—. Las JHP modernas de núcleo soldado (<i>bonded</i>) buscan el equilibrio: expansión confiable y penetración suficiente, incluso después de una barrera.</p>
+   <div class="sec">Cavidad permanente vs temporal</div>
+   <ul class="glist">
+     <li><b>Cavidad permanente</b> — el tejido aplastado y cortado: el agujero real. Es el mecanismo de herida confiable a cualquier velocidad.</li>
+     <li><b>Cavidad temporal</b> — el estiramiento momentáneo del tejido alrededor del canal. Pesa sobre todo a velocidades de fusil; a velocidades de pistola es menor.</li>
+     <li><b>El mito de la «energía»</b> — los joules en la boca no predicen la herida por sí solos: importa dónde y cuánto tejido se daña.</li>
+   </ul>
+   <div class="sec">Sobrepenetración y barreras</div>
+   <p class="gp">Las barreras comunes —panel de yeso, madera, puertas de auto— <b>no frenan</b> de forma confiable un proyectil de pistola o fusil; un FMJ las cruza casi sin inmutarse. En defensa hogareña, la <b>sobrepenetración</b> (la bala que sigue de largo) es un riesgo de seguridad. Ante barreras, la construcción de la bala pesa más que el calibre.</p>
+   <div class="sec">Caza vs defensa</div>
+   <ul class="glist">
+     <li><b>Caza:</b> penetración suficiente para llegar a vitales más expansión controlada para un golpe rápido y humanitario; para hueso o caza peligrosa, balas duras o sólidas. La <b>densidad seccional</b> (en cada ficha) ayuda a estimar la penetración.</li>
+     <li><b>Defensa:</b> el equilibrio del protocolo FBI —30–46&nbsp;cm, expansión confiable, mínima sobrepenetración—.</li>
+     <li><b>En ambos casos el calibre no decide solo:</b> manda la <b>construcción de la bala</b> (FMJ, JHP, soldada, sólida).</li>
+   </ul>`,
+  en:`<p class="gp"><b>Terminal</b> ballistics is what happens when the bullet hits —distinct from external ballistics (velocity, energy, trajectory)—. It boils down to two questions: how deep it <b>penetrates</b> and how wide it <b>opens</b>.</p>
+   <div class="sec">The FBI protocol</div>
+   <p class="gp">It is the standard for handgun ammunition. Rounds are fired into 10% <b>ballistic gelatin</b> and the target is <b>30 to 46&nbsp;cm (12–18″)</b> of penetration, tested in bare gel and through barriers: heavy clothing, steel, wallboard, plywood and auto glass. The goal is to reach the vital organs even through an arm or a barrier, without over-penetrating.</p>
+   <div class="gdiagram">${TERMDIAG}</div>
+   <p class="gcap">Wound channel: the permanent cavity (red) inside the temporary cavity (stretch), and the depth reached</p>
+   <div class="sec">Penetration vs expansion</div>
+   <p class="gp">There is a trade-off. A bullet that <b>expands</b> (hollow point, JHP) makes a wider wound but penetrates less; one that does <b>not</b> expand (FMJ, solid) drives deep and narrow —and tends to over-penetrate—. Modern bonded JHPs aim for the balance: reliable expansion and enough penetration, even after a barrier.</p>
+   <div class="sec">Permanent vs temporary cavity</div>
+   <ul class="glist">
+     <li><b>Permanent cavity</b> — the crushed and cut tissue: the actual hole. It is the reliable wounding mechanism at any velocity.</li>
+     <li><b>Temporary cavity</b> — the momentary stretch of tissue around the track. It matters mostly at rifle velocities; at handgun velocities it is minor.</li>
+     <li><b>The "energy" myth</b> — muzzle joules do not predict the wound on their own: what counts is where and how much tissue is damaged.</li>
+   </ul>
+   <div class="sec">Over-penetration and barriers</div>
+   <p class="gp">Common barriers —wallboard, wood, car doors— do <b>not</b> reliably stop a handgun or rifle projectile; an FMJ sails through them. In home defense, <b>over-penetration</b> (the bullet that keeps going) is a safety concern. For barrier behavior, bullet construction matters more than caliber.</p>
+   <div class="sec">Hunting vs defense</div>
+   <ul class="glist">
+     <li><b>Hunting:</b> enough penetration to reach the vitals plus controlled expansion for a quick, humane hit; for bone or dangerous game, hard or solid bullets. <b>Sectional density</b> (on each card) helps estimate penetration.</li>
+     <li><b>Defense:</b> the FBI-protocol balance —30–46&nbsp;cm, reliable expansion, minimal over-penetration—.</li>
+     <li><b>In both, caliber doesn't decide alone:</b> the <b>bullet construction</b> (FMJ, JHP, bonded, solid) rules.</li>
+   </ul>`}},
  nine:{rk:{es:"Artículo · Robert A. Sadowski",en:"Feature · Robert A. Sadowski"},h2:{es:"El 9 mm, número uno",en:"How the 9mm became No. 1"},cite:CITE9,body:{
   es:`<p class="gp">El 9×19 nació en 1902 de la mano de Georg Luger —estirando el cuello del 7,65 Parabellum— y se pensó letal hasta unos 50 m. La primera carga "+P" fue, en realidad, una versión un 15% más caliente para carabinas. En la Segunda Guerra aparecieron las vainas de acero.</p>
    <div class="sec">Lo que lo cambió todo: la bala</div>
