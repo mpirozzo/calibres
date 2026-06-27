@@ -403,6 +403,12 @@ body:has(.overlay.on) .printfloat{display:inline-flex}
   .synline{font-size:12.5px;color:var(--ink2);margin:-2px 0 14px;line-height:1.5}
   .synline b{color:var(--ink3);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-right:6px}
   @media print{ .synline{color:#333 !important} .synline b{color:#666 !important} }
+  .hstbl{width:100%;border-collapse:collapse;font-size:12.5px;margin:4px 0 10px}
+  .hstbl td{padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.3}
+  .hstbl td:first-child{font-family:var(--mono);color:var(--brass);white-space:nowrap;font-weight:700;width:1%;padding-right:14px}
+  .hstbl td:last-child{color:var(--ink3);text-align:right;white-space:nowrap;font-size:11px}
+  .hstbl tr:last-child td{border-bottom:0}
+  @media print{ .hstbl td{color:#222 !important;border-color:#ddd !important} .hstbl td:first-child{color:#7a5c12 !important} .hstbl td:last-child{color:#666 !important} }
 </style>
 </head>
 <body data-lang="es">
@@ -2425,6 +2431,7 @@ const SVGPRIMER={es:primerSVG('es'),en:primerSVG('en')};
 const CITE={es:'Información basada en las secciones «Cartridge Nomenclature», «Cartridge Identification» y la introducción de <i>Cartridges of the World</i>, 18.ª edición (Gun Digest Books · Caribou Media Group, 2026), de Frank C. Barnes, ed. W. Todd Woodard. Texto reelaborado, ampliado y traducido; los diagramas son propios.',en:'Based on the “Cartridge Nomenclature,” “Cartridge Identification” and introduction sections of <i>Cartridges of the World</i>, 18th Edition (Gun Digest Books · Caribou Media Group, 2026), by Frank C. Barnes, ed. W. Todd Woodard. Text reworked, expanded and translated; diagrams are original.'};
 const CITE9={es:'Información basada en el artículo «How the 9mm Became No. 1», de Robert A. Sadowski, en <i>Cartridges of the World</i>, 18.ª edición (Gun Digest Books · Caribou Media Group, 2026). Texto reelaborado y traducido.',en:'Based on “How the 9mm Became No. 1,” by Robert A. Sadowski, in <i>Cartridges of the World</i>, 18th Edition (Gun Digest Books · Caribou Media Group, 2026). Text reworked and translated.'};
 
+const HSDIAG='<svg viewBox="0 0 300 234" xmlns="http://www.w3.org/2000/svg"><circle cx="150" cy="116" r="98" fill="#0e1116" stroke="#3a352b" stroke-width="2"/><circle cx="150" cy="116" r="94" fill="none" stroke="#c9a24c" stroke-width="2" opacity="0.45"/><circle cx="150" cy="116" r="86" fill="#13171e" stroke="#272d38" stroke-width="1.5"/><circle cx="150" cy="116" r="27" fill="#1b2029" stroke="#5a5346" stroke-width="2"/><circle cx="150" cy="116" r="3.2" fill="#3a352b"/><text x="150" y="60" fill="#e9e7e1" font-family="ui-monospace,monospace" font-size="23" font-weight="700" text-anchor="middle" letter-spacing="4">LC</text><text x="150" y="190" fill="#e9e7e1" font-family="ui-monospace,monospace" font-size="23" font-weight="700" text-anchor="middle" letter-spacing="4">67</text><text x="74" y="126" fill="#5fb0a8" font-family="ui-monospace,monospace" font-size="27" font-weight="700" text-anchor="middle">+</text><text x="150" y="18" fill="#c9a24c" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">12 h</text><text x="268" y="120" fill="#6f6b63" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">3 h</text><text x="150" y="230" fill="#c9a24c" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">6 h</text><text x="32" y="120" fill="#5fb0a8" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">9 h</text></svg>';
 const GUIDE={
  nomen:{rk:{es:"Referencia · Nomenclatura",en:"Reference · Nomenclature"},h2:{es:"Nomenclatura de cartuchos",en:"Cartridge nomenclature"},cite:CITE,body:{
   es:`<p class="gp">La forma de nombrar a los cartuchos es célebre por su falta de lógica. Más que un sistema, es un código heredado de siglo y medio de tradiciones cruzadas: lo que en un nombre son milímetros, en otro son centésimas de pulgada, un año o una carga de pólvora que ya nadie usa.</p>
@@ -2509,7 +2516,79 @@ const GUIDE={
      <tr><td>Largo de vaina</td><td>2,494″</td></tr>
      <tr><td>Largo total</td><td>3,340″</td></tr>
    </table>
-   <p class="gp" style="margin-top:8px">…es, nada menos, el <b>.30-06 Springfield</b>. Ojo: el headstamp puede engañar —hubo pedidos especiales, recargadores comerciales y aficionados— así que la medida manda.</p>`,
+   <p class="gp" style="margin-top:8px">…es, nada menos, el <b>.30-06 Springfield</b>. Ojo: el headstamp puede engañar —hubo pedidos especiales, recargadores comerciales y aficionados— así que la medida manda.</p>
+   <div class="sec">El headstamp en detalle</div>
+   <p class="gp">El sello del culote se lee como un reloj. En lo militar el <b>fabricante</b> va casi siempre a las <b>12</b> y, abajo a las <b>6</b>, el <b>año</b> (2 ó 4 dígitos); pueden sumarse mes o trimestre, número de lote y la <b>marca OTAN</b> (una cruz «+»). En lo civil suele ir la marca arriba y el <b>calibre</b> abajo —por ejemplo <code>WIN</code> / <code>9 mm LUGER</code>.</p>
+   <div class="gdiagram">${HSDIAG}</div>
+   <p class="gcap">Ejemplo militar: «LC 67» = Lake City, 1967, con marca OTAN (+)</p>
+   <ul class="glist">
+     <li><b>12 h — Fabricante.</b> Código de 2–3 caracteres (p. ej. <code>LC</code> = Lake City).</li>
+     <li><b>6 h — Calibre (civil) o año (militar).</b> En la 2.ª Guerra, un solo «4» = 1944 (se borraba el «3» del cuño «43» para ahorrar tiempo).</li>
+     <li><b>3 h / 9 h — Lote, mes o marca OTAN.</b> La cruz «+» indica munición a norma OTAN, intercambiable entre países aliados.</li>
+     <li><b>Centro — Fulminante.</b> Un fogón = Boxer (recargable); dos o más = Berdan. <code>NR</code> = no recargable (vaina de aluminio); <code>NT</code> = no tóxico.</li>
+     <li><b>Anillo de color del fulminante.</b> El sellante coloreado (rojo, púrpura, azul…) marca lotes especiales y es una pista de origen.</li>
+   </ul>
+   <div class="sec">Códigos de fabricantes (civiles)</div>
+   <table class="hstbl"><tbody>
+     <tr><td>WIN · W-W</td><td>Winchester</td><td>EE.UU.</td></tr>
+     <tr><td>WRA</td><td>Winchester Repeating Arms</td><td>EE.UU.</td></tr>
+     <tr><td>R-P · REM-UMC</td><td>Remington</td><td>EE.UU.</td></tr>
+     <tr><td>FC</td><td>Federal Cartridge</td><td>EE.UU.</td></tr>
+     <tr><td>CCI · BLAZER</td><td>Cascade Cartridge Inc.</td><td>EE.UU.</td></tr>
+     <tr><td>SPEER</td><td>Speer (grupo CCI)</td><td>EE.UU.</td></tr>
+     <tr><td>HORNADY</td><td>Hornady</td><td>EE.UU.</td></tr>
+     <tr><td>PMC</td><td>Poongsan (PMC)</td><td>Corea del Sur</td></tr>
+     <tr><td>FN · FNB</td><td>Fabrique Nationale</td><td>Bélgica</td></tr>
+     <tr><td>RWS</td><td>RWS (Dynamit Nobel)</td><td>Alemania</td></tr>
+     <tr><td>GECO</td><td>Gustav Genschow</td><td>Alemania</td></tr>
+     <tr><td>MEN</td><td>Metallwerk Elisenhütte</td><td>Alemania</td></tr>
+     <tr><td>DWM</td><td>Deutsche Waffen u. Mun. (hist.)</td><td>Alemania</td></tr>
+     <tr><td>S&amp;B</td><td>Sellier &amp; Bellot</td><td>Chequia</td></tr>
+     <tr><td>PPU · PP-YU</td><td>Prvi Partizan</td><td>Serbia</td></tr>
+     <tr><td>NORMA</td><td>Norma</td><td>Suecia</td></tr>
+     <tr><td>LAPUA · VPT</td><td>Lapua / Nammo</td><td>Finlandia</td></tr>
+     <tr><td>SAKO</td><td>Sako (grupo Beretta)</td><td>Finlandia</td></tr>
+     <tr><td>GFL · Fiocchi</td><td>Fiocchi</td><td>Italia</td></tr>
+     <tr><td>HP</td><td>Hirtenberger</td><td>Austria</td></tr>
+     <tr><td>IMI</td><td>Israel Military Ind. / IWI</td><td>Israel</td></tr>
+     <tr><td>CBC · MAGTECH</td><td>Cia. Brasileira de Cartuchos</td><td>Brasil</td></tr>
+     <tr><td>AGUILA</td><td>Aguila (Industrias Tecnos)</td><td>México</td></tr>
+     <tr><td>ADI</td><td>Australian Defence Ind.</td><td>Australia</td></tr>
+     <tr><td>TULA · BARNAUL</td><td>Tula / Barnaul</td><td>Rusia</td></tr>
+     <tr><td>NORINCO · 31 · 71</td><td>Norinco (códigos numéricos)</td><td>China</td></tr>
+   </tbody></table>
+   <div class="sec">Plantas y códigos militares</div>
+   <table class="hstbl"><tbody>
+     <tr><td>LC</td><td>Lake City AAP (activa)</td><td>EE.UU.</td></tr>
+     <tr><td>FC</td><td>Federal Cartridge</td><td>EE.UU.</td></tr>
+     <tr><td>WCC</td><td>Western / Winchester</td><td>EE.UU.</td></tr>
+     <tr><td>WMA</td><td>Winchester Mil. Ammo</td><td>EE.UU.</td></tr>
+     <tr><td>RA</td><td>Remington Arms</td><td>EE.UU.</td></tr>
+     <tr><td>FA</td><td>Frankford Arsenal (hist.)</td><td>EE.UU.</td></tr>
+     <tr><td>TW</td><td>Twin Cities OP (hist.)</td><td>EE.UU.</td></tr>
+     <tr><td>SL</td><td>St. Louis OP (hist.)</td><td>EE.UU.</td></tr>
+     <tr><td>DEN</td><td>Denver OP (hist.)</td><td>EE.UU.</td></tr>
+     <tr><td>LS</td><td>Lone Star AAP (hist.)</td><td>EE.UU.</td></tr>
+     <tr><td>PBA</td><td>Pine Bluff Arsenal</td><td>EE.UU.</td></tr>
+     <tr><td>RG</td><td>Radway Green (ROF)</td><td>Reino Unido</td></tr>
+     <tr><td>K</td><td>Kynoch / ICI</td><td>Reino Unido</td></tr>
+     <tr><td>RL</td><td>Royal Laboratory, Woolwich</td><td>Reino Unido</td></tr>
+     <tr><td>DA · IVI</td><td>Dominion Arsenal / Valcartier</td><td>Canadá</td></tr>
+     <tr><td>HXP</td><td>Pyrkal (excedente griego)</td><td>Grecia</td></tr>
+     <tr><td>bxn</td><td>Sellier &amp; Bellot (código mil.)</td><td>Chequia</td></tr>
+     <tr><td>IK</td><td>Igman, Konjic</td><td>Bosnia</td></tr>
+     <tr><td>MF · MG · MQ</td><td>Fábricas SAAF (hist.)</td><td>Australia</td></tr>
+     <tr><td>P</td><td>FN Herstal / Polte / Peters</td><td>varios</td></tr>
+   </tbody></table>
+   <div class="sec">Trampas frecuentes</div>
+   <ul class="glist">
+     <li><b><code>FC</code> = Federal</b>, no Fiocchi (Fiocchi se marca «Fiocchi» o <code>GFL</code>).</li>
+     <li><b>Códigos reusados.</b> <code>P</code>, <code>U</code>, <code>H</code>, <code>K</code>, <code>DM</code> o <code>ADI</code> significan cosas distintas según país y época: el contexto manda.</li>
+     <li><b>Civil ≠ militar de la misma marca.</b> Winchester usa <code>WIN</code> (civil) pero <code>WCC</code> / <code>WMA</code> (militar).</li>
+     <li><b>Importador ≠ fabricante.</b> «Wolf», «Red Army», «Magtech», «TulAmmo» son marcas; el culote dice quién lo <i>fabricó</i> (Tula, Barnaul, PPU, Igman, CBC…).</li>
+     <li><b>Falsificaciones.</b> «LC 52» o «RG 60» con fulminante Berdan corrosivo y vaina de acero son copias, no la planta real.</li>
+     <li><b>Wildcats.</b> Suelen conservar el culote del casquillo de origen, así que el sello puede no coincidir con el calibre real.</li>
+   </ul>`,
   en:`<p class="gp">Identifying a cartridge matters to the collector, the forensic examiner and the military analyst. The quickest clue is the <b>headstamp</b> —the markings on the case head—, but it isn't always enough: it can be missing, illegible, or misleading on a wildcat. When the stamp won't do, you measure.</p>
    <div class="sec">What you measure</div>
    <div class="gdiagram">${SVGANAT.en}</div>
@@ -2543,7 +2622,79 @@ const GUIDE={
      <tr><td>Case length</td><td>2.494″</td></tr>
      <tr><td>Overall length</td><td>3.340″</td></tr>
    </table>
-   <p class="gp" style="margin-top:8px">…is none other than the <b>.30-06 Springfield</b>. Beware: headstamps can mislead —there were special orders, commercial reloaders and handloaders— so the measurement rules.</p>`}},
+   <p class="gp" style="margin-top:8px">…is none other than the <b>.30-06 Springfield</b>. Beware: headstamps can mislead —there were special orders, commercial reloaders and handloaders— so the measurement rules.</p>
+   <div class="sec">The headstamp in detail</div>
+   <p class="gp">The case-head stamp reads like a clock. On military rounds the <b>maker</b> is almost always at <b>12</b> and, at the bottom at <b>6</b>, the <b>year</b> (2 or 4 digits); month or quarter, lot number and the <b>NATO mark</b> (a «+» cross) may be added. Civilian rounds usually carry the brand on top and the <b>caliber</b> below —for example <code>WIN</code> / <code>9 mm LUGER</code>.</p>
+   <div class="gdiagram">${HSDIAG}</div>
+   <p class="gcap">Military example: “LC 67” = Lake City, 1967, with NATO mark (+)</p>
+   <ul class="glist">
+     <li><b>12 o'clock — Maker.</b> A 2–3 character code (e.g. <code>LC</code> = Lake City).</li>
+     <li><b>6 o'clock — Caliber (civilian) or year (military).</b> In WWII a lone “4” = 1944 (the “3” of the “43” die was ground off to save time).</li>
+     <li><b>3 / 9 o'clock — Lot, month or NATO mark.</b> The «+» cross means the round meets NATO spec and is interchangeable among allies.</li>
+     <li><b>Center — Primer.</b> One flash hole = Boxer (reloadable); two or more = Berdan. <code>NR</code> = non-reloadable (aluminum case); <code>NT</code> = non-toxic.</li>
+     <li><b>Primer-annulus color.</b> The colored sealant (red, purple, blue…) marks special loads and is a clue to origin.</li>
+   </ul>
+   <div class="sec">Maker codes (commercial)</div>
+   <table class="hstbl"><tbody>
+     <tr><td>WIN · W-W</td><td>Winchester</td><td>USA</td></tr>
+     <tr><td>WRA</td><td>Winchester Repeating Arms</td><td>USA</td></tr>
+     <tr><td>R-P · REM-UMC</td><td>Remington</td><td>USA</td></tr>
+     <tr><td>FC</td><td>Federal Cartridge</td><td>USA</td></tr>
+     <tr><td>CCI · BLAZER</td><td>Cascade Cartridge Inc.</td><td>USA</td></tr>
+     <tr><td>SPEER</td><td>Speer (CCI group)</td><td>USA</td></tr>
+     <tr><td>HORNADY</td><td>Hornady</td><td>USA</td></tr>
+     <tr><td>PMC</td><td>Poongsan (PMC)</td><td>South Korea</td></tr>
+     <tr><td>FN · FNB</td><td>Fabrique Nationale</td><td>Belgium</td></tr>
+     <tr><td>RWS</td><td>RWS (Dynamit Nobel)</td><td>Germany</td></tr>
+     <tr><td>GECO</td><td>Gustav Genschow</td><td>Germany</td></tr>
+     <tr><td>MEN</td><td>Metallwerk Elisenhütte</td><td>Germany</td></tr>
+     <tr><td>DWM</td><td>Deutsche Waffen u. Mun. (hist.)</td><td>Germany</td></tr>
+     <tr><td>S&amp;B</td><td>Sellier &amp; Bellot</td><td>Czechia</td></tr>
+     <tr><td>PPU · PP-YU</td><td>Prvi Partizan</td><td>Serbia</td></tr>
+     <tr><td>NORMA</td><td>Norma</td><td>Sweden</td></tr>
+     <tr><td>LAPUA · VPT</td><td>Lapua / Nammo</td><td>Finland</td></tr>
+     <tr><td>SAKO</td><td>Sako (Beretta group)</td><td>Finland</td></tr>
+     <tr><td>GFL · Fiocchi</td><td>Fiocchi</td><td>Italy</td></tr>
+     <tr><td>HP</td><td>Hirtenberger</td><td>Austria</td></tr>
+     <tr><td>IMI</td><td>Israel Military Ind. / IWI</td><td>Israel</td></tr>
+     <tr><td>CBC · MAGTECH</td><td>Cia. Brasileira de Cartuchos</td><td>Brazil</td></tr>
+     <tr><td>AGUILA</td><td>Aguila (Industrias Tecnos)</td><td>Mexico</td></tr>
+     <tr><td>ADI</td><td>Australian Defence Ind.</td><td>Australia</td></tr>
+     <tr><td>TULA · BARNAUL</td><td>Tula / Barnaul</td><td>Russia</td></tr>
+     <tr><td>NORINCO · 31 · 71</td><td>Norinco (numeric codes)</td><td>China</td></tr>
+   </tbody></table>
+   <div class="sec">Military plants and codes</div>
+   <table class="hstbl"><tbody>
+     <tr><td>LC</td><td>Lake City AAP (active)</td><td>USA</td></tr>
+     <tr><td>FC</td><td>Federal Cartridge</td><td>USA</td></tr>
+     <tr><td>WCC</td><td>Western / Winchester</td><td>USA</td></tr>
+     <tr><td>WMA</td><td>Winchester Mil. Ammo</td><td>USA</td></tr>
+     <tr><td>RA</td><td>Remington Arms</td><td>USA</td></tr>
+     <tr><td>FA</td><td>Frankford Arsenal (hist.)</td><td>USA</td></tr>
+     <tr><td>TW</td><td>Twin Cities OP (hist.)</td><td>USA</td></tr>
+     <tr><td>SL</td><td>St. Louis OP (hist.)</td><td>USA</td></tr>
+     <tr><td>DEN</td><td>Denver OP (hist.)</td><td>USA</td></tr>
+     <tr><td>LS</td><td>Lone Star AAP (hist.)</td><td>USA</td></tr>
+     <tr><td>PBA</td><td>Pine Bluff Arsenal</td><td>USA</td></tr>
+     <tr><td>RG</td><td>Radway Green (ROF)</td><td>UK</td></tr>
+     <tr><td>K</td><td>Kynoch / ICI</td><td>UK</td></tr>
+     <tr><td>RL</td><td>Royal Laboratory, Woolwich</td><td>UK</td></tr>
+     <tr><td>DA · IVI</td><td>Dominion Arsenal / Valcartier</td><td>Canada</td></tr>
+     <tr><td>HXP</td><td>Pyrkal (Greek surplus)</td><td>Greece</td></tr>
+     <tr><td>bxn</td><td>Sellier &amp; Bellot (mil. code)</td><td>Czechia</td></tr>
+     <tr><td>IK</td><td>Igman, Konjic</td><td>Bosnia</td></tr>
+     <tr><td>MF · MG · MQ</td><td>SAAF factories (hist.)</td><td>Australia</td></tr>
+     <tr><td>P</td><td>FN Herstal / Polte / Peters</td><td>various</td></tr>
+   </tbody></table>
+   <div class="sec">Common traps</div>
+   <ul class="glist">
+     <li><b><code>FC</code> = Federal</b>, not Fiocchi (Fiocchi is marked “Fiocchi” or <code>GFL</code>).</li>
+     <li><b>Reused codes.</b> <code>P</code>, <code>U</code>, <code>H</code>, <code>K</code>, <code>DM</code> or <code>ADI</code> mean different things by country and era — context rules.</li>
+     <li><b>Civilian ≠ military of the same brand.</b> Winchester uses <code>WIN</code> (civilian) but <code>WCC</code> / <code>WMA</code> (military).</li>
+     <li><b>Importer ≠ maker.</b> “Wolf”, “Red Army”, “Magtech”, “TulAmmo” are brands; the headstamp says who <i>made</i> it (Tula, Barnaul, PPU, Igman, CBC…).</li>
+     <li><b>Fakes.</b> “LC 52” or “RG 60” with a corrosive Berdan primer and a steel case are copies, not the real plant.</li>
+     <li><b>Wildcats.</b> They usually keep the parent case's headstamp, so the stamp may not match the actual caliber.</li>
+   </ul>`}},
  histo:{rk:{es:"Referencia · Historia",en:"Reference · History"},h2:{es:"Breve historia del cartucho",en:"A brief history of the cartridge"},cite:CITE,body:{
   es:`<p class="gp">La pólvora negra nació en China hacia el siglo IX —al principio para fuegos artificiales— y llegó a Europa en el siglo XIII. Durante unos seiscientos años, las armas se cargaron por la boca: pólvora, taco y bala, una a una. El cartucho metálico autocontenido, que reúne todo en una sola pieza, es muchísimo más reciente: se perfeccionó recién hacia 1850.</p>
    <div class="sec">El cartucho autocontenido (h. 1850)</div>
