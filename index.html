@@ -2244,24 +2244,26 @@ let hsuid=0;
 function headstampDisk(c,cx,cy,R){
   var m=MFG[c.n]; if(!m) return '';
   var u='h'+(hsuid++);
-  var BIGR=(c.n==='5,56×45 mm OTAN / .223 Rem'), rt=R*(BIGR?0.745:0.713), lenC=(''+m.cal).length, lenH=(''+(m.hs||'AA')).length, fsC=(R*0.284*Math.min(1,7/Math.max(1,lenC))).toFixed(2), fsH=(R*0.284*Math.min(1,7/Math.max(1,lenH))).toFixed(2);
-  var bl=(cx-rt*0.9).toFixed(2), br=(cx+rt*0.9).toFixed(2), by=(cy+rt*0.46).toFixed(2), ty=(cy-rt*0.5).toFixed(2), Rr=rt.toFixed(2);
+  var lenC=(''+m.cal).length, lenH=(''+(m.hs||'AA')).length;
+  var fsC=(R*Math.min(0.385,4.0/Math.max(1,lenC))).toFixed(2), fsH=(R*Math.min(0.415,1.9/Math.max(1,lenH))).toFixed(2);
+  var RbM=R*0.470, RbC=R*0.815, Rg=R*0.960;
+  var blC=(cx-RbC*0.9).toFixed(2), brC=(cx+RbC*0.9).toFixed(2), byC=(cy+RbC*0.46).toFixed(2), RrC=RbC.toFixed(2);
+  var blM=(cx-RbM*0.9).toFixed(2), brM=(cx+RbM*0.9).toFixed(2), tyM=(cy-RbM*0.5).toFixed(2), RrM=RbM.toFixed(2);
   var dyL=(R*0.012).toFixed(3), dyD=(-R*0.010).toFixed(3), blurD=(R*0.006).toFixed(3);
   var primer = c.t.indexOf('rimfire')<0
-    ? '<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*0.34).toFixed(2)+'" fill="url(#hp'+u+')" stroke="#3a352b" stroke-width="'+(R*0.018).toFixed(2)+'"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(R*0.34).toFixed(2)+'" fill="none" stroke="#15140f" stroke-opacity=".45" stroke-width="'+(R*0.03).toFixed(2)+'"/>'
-    : '<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*0.54).toFixed(2)+'" fill="none" stroke="#7a6a3a" stroke-opacity=".28" stroke-width="'+(R*0.016).toFixed(2)+'" stroke-dasharray="'+(R*0.022).toFixed(2)+' '+(R*0.05).toFixed(2)+'"/>';
+    ? '<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*0.34).toFixed(2)+'" fill="url(#hp'+u+')" stroke="#473810" stroke-opacity=".5" stroke-width="'+(R*0.028).toFixed(2)+'"/>'
+    : '<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*0.54).toFixed(2)+'" fill="none" stroke="#473810" stroke-opacity=".5" stroke-width="'+(R*0.02).toFixed(2)+'" stroke-dasharray="'+(R*0.022).toFixed(2)+' '+(R*0.05).toFixed(2)+'"/>';
   var maker = m.hs ? '<text class="hsoro" filter="url(#hse'+u+')" style="font-size:'+fsH+'px"><textPath href="#ht'+u+'" startOffset="50%" text-anchor="middle">'+escX(m.hs)+'</textPath></text>' : '';
   return '<g>'
    +'<defs>'
    +'<radialGradient id="hf'+u+'" cx="40%" cy="32%" r="74%"><stop offset="0" stop-color="#f5e6aa"/><stop offset=".5" stop-color="#c9a24c"/><stop offset="1" stop-color="#6b531a"/></radialGradient>'
    +'<radialGradient id="hp'+u+'" cx="42%" cy="36%" r="72%"><stop offset="0" stop-color="#c6bfae"/><stop offset=".7" stop-color="#8c8579"/><stop offset="1" stop-color="#5a5046"/></radialGradient>'
-   +'<path id="hb'+u+'" d="M '+bl+' '+by+' A '+Rr+' '+Rr+' 0 0 0 '+br+' '+by+'" fill="none"/>'
-   +'<path id="ht'+u+'" d="M '+bl+' '+ty+' A '+Rr+' '+Rr+' 0 0 1 '+br+' '+ty+'" fill="none"/>'
+   +'<path id="hb'+u+'" d="M '+blC+' '+byC+' A '+RrC+' '+RrC+' 0 0 0 '+brC+' '+byC+'" fill="none"/>'
+   +'<path id="ht'+u+'" d="M '+blM+' '+tyM+' A '+RrM+' '+RrM+' 0 0 1 '+brM+' '+tyM+'" fill="none"/>'
    +'<filter id="hse'+u+'" x="-35%" y="-35%" width="170%" height="170%"><feDropShadow dx="0" dy="'+dyL+'" stdDeviation="0" flood-color="#fff6d4" flood-opacity="0.85"/><feDropShadow dx="0" dy="'+dyD+'" stdDeviation="'+blurD+'" flood-color="#1c1204" flood-opacity="0.6"/></filter>'
    +'</defs>'
    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+R.toFixed(2)+'" fill="url(#hf'+u+')" stroke="#544012" stroke-width="'+(R*0.05).toFixed(2)+'"/>'
-   +'<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*0.985).toFixed(2)+'" fill="none" stroke="#f9efc6" stroke-opacity=".3" stroke-width="'+(R*0.016).toFixed(2)+'"/>'
-   +'<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*(BIGR?0.72:0.58)).toFixed(2)+'" fill="none" stroke="#473810" stroke-opacity=".5" stroke-width="'+(R*0.028).toFixed(2)+'"/>'
+   +'<circle cx="'+cx+'" cy="'+cy+'" r="'+Rg.toFixed(2)+'" fill="none" stroke="#473810" stroke-opacity=".5" stroke-width="'+(R*0.028).toFixed(2)+'"/>'
    +primer
    +'<text class="hsoro" filter="url(#hse'+u+')" style="font-size:'+fsC+'px"><textPath href="#hb'+u+'" startOffset="50%" text-anchor="middle">'+escX(m.cal)+'</textPath></text>'
    +maker
