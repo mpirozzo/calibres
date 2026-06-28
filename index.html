@@ -476,10 +476,6 @@ body:has(.overlay.on) .printfloat{display:inline-flex}
       <button class="guidebtn" data-g="nine" style="--ac:var(--pistola)"><span class="garr">›</span><span class="gk"><span class="l-es">Artículo</span><span class="l-en">Feature</span></span><span class="gt"><span class="l-es">El 9 mm, número uno</span><span class="l-en">The 9mm, No. 1</span></span><span class="gd"><span class="l-es">Por qué le ganó al .40 y al .45</span><span class="l-en">Why it beat the .40 and .45</span></span></button>
     </div>
 
-    <details class="note">
-      <summary><span class="l-es">¿Por qué el orden no sigue al nombre?</span><span class="l-en">Why doesn't the order follow the name?</span></summary>
-      <div class="body"><span class="l-es">Porque el nombre rara vez coincide con el diámetro. El <code>.380</code> suena más grande que el <code>9&nbsp;mm</code>, pero ambos miden lo mismo: <code>.355"</code>. Y el <code>.38&nbsp;Special</code> en realidad dispara una bala de <code>.357"</code>. Acá el orden es por el diámetro medido de la bala, no por la designación comercial.<br><br>Las <b>escopetas</b> usan otra escala —el <b>calibre</b> o <i>gauge</i>—, que es <b>inversa</b>: un <code>12</code> tiene mayor ánima que un <code>20</code>. Van ordenadas por su ánima real y marcadas con la etiqueta <i>Escopeta</i>.</span><span class="l-en">Because the name rarely matches the diameter. The <code>.380</code> sounds bigger than <code>9&nbsp;mm</code>, yet both measure the same: <code>.355"</code>. And the <code>.38&nbsp;Special</code> actually fires a <code>.357"</code> bullet. Here the order is by the bullet's measured diameter, not the commercial designation.<br><br><b>Shotguns</b> use a different scale —the <b>gauge</b>—, which is <b>inverse</b>: a <code>12</code> has a larger bore than a <code>20</code>. They're ordered by their real bore and marked with the <i>Shotgun</i> tag.</span></div>
-    </details>
   </header>
 
   <div class="controls">
@@ -2543,13 +2539,12 @@ function openDetail(i,fc){
 
       <div class="sec">${tr.secNote[lang]}</div>
       <p class="notes">${pick(c.nt)}</p>${MFG[c.n]&&MFG[c.n].note?'<p class="notes mfg"><b>'+(lang==='en'?'Manufacture':'Fabricaci\u00f3n')+' \u2014 </b>'+pick(MFG[c.n].note)+'</p>':''}
-      ${(LOADS[c.n]&&LOADS[c.n].loads&&LOADS[c.n].loads.length)?`<div class="sec">${lang==='en'?'\ud83d\udccb Manual load tables \u2014 Cartridges of the World':'\ud83d\udccb Tablas de carga del manual \u2014 Cartridges of the World'}</div>
-      <p class="rnote">${lang==='en'?'Factory and handload data from the manual, for reference (as published).':'Datos de f\u00e1brica y de recarga del manual, a modo de referencia (seg\u00fan lo publicado).'}</p>
-      ${loadTableStatic(c.n, unitset(uNow()), lang==='en')}`:''}
+      <div id="fichaLoadWrap"></div>
     </div>`;
   document.getElementById("xbtn").addEventListener("click",closeDetail);
   panel.querySelectorAll(".fwbtn").forEach(b=>b.addEventListener("click",()=>openWeapon(b.dataset.w)));
   var _tl=panel.querySelector(".tolab"); if(_tl)_tl.addEventListener("click",()=>{ const cart=_tl.dataset.cart; closeDetail(); if(!labState)initLab(); labState.slots[0]=defSlot(cart); labState.slots[0].on=true; openLab(); });
+  fLoadOpen=false; renderFichaLoads(c.n);
   ov.classList.add("on"); document.body.style.overflow="hidden"; panel.scrollTop=0;
 }
 function culote(rt){return{"sin pestaña":tr.rimless[lang],"pestaña":tr.rimmed[lang],"semi-pestaña":tr.semirimmed[lang],"cinturón":tr.belted[lang],"rebajada":tr.rebated[lang]}[rt]||rt;}
@@ -2739,7 +2734,9 @@ const GUIDE={
    <div class="sec">El encendido</div>
    <div class="gdiagram">${SVGPRIMER.es}</div>
    <p class="gcap">El culote visto de frente: tres formas de encendido</p>
-   <p class="gp">Por su ignición hay dos familias: <b>percusión anular</b> (rimfire), con la mezcla iniciadora prensada dentro del reborde —que se percute en el borde y no deja recargar—, y <b>percusión central</b> (centerfire), de fulminante removible y recargable. El central puede ser <b>Boxer</b> (yunque propio y un solo fogón; casi todo lo estadounidense, fácil de recargar) o <b>Berdan</b> (yunque en la vaina y dos o más fogones; típico europeo). El rimfire suele llevar su encendido en el propio nombre: de ahí el <b>.22 LR</b> (Long Rifle), el <b>.17 HMR</b> (Hornady Magnum Rimfire) o el <b>.22 WMR</b> (Winchester Magnum Rimfire).</p>`,
+   <p class="gp">Por su ignición hay dos familias: <b>percusión anular</b> (rimfire), con la mezcla iniciadora prensada dentro del reborde —que se percute en el borde y no deja recargar—, y <b>percusión central</b> (centerfire), de fulminante removible y recargable. El central puede ser <b>Boxer</b> (yunque propio y un solo fogón; casi todo lo estadounidense, fácil de recargar) o <b>Berdan</b> (yunque en la vaina y dos o más fogones; típico europeo). El rimfire suele llevar su encendido en el propio nombre: de ahí el <b>.22 LR</b> (Long Rifle), el <b>.17 HMR</b> (Hornady Magnum Rimfire) o el <b>.22 WMR</b> (Winchester Magnum Rimfire).</p>
+   <div class="sec">Por qué el orden no sigue al nombre</div>
+   <p class="gp">Como el nombre rara vez coincide con el diámetro, esta referencia ordena los cartuchos por el <b>diámetro real de la bala</b>, no por su designación comercial. Por eso el <code>.380</code> —que suena más grande que el <code>9&nbsp;mm</code>— queda junto a él: ambos miden <code>.355"</code>; y el <code>.38&nbsp;Special</code>, que en realidad dispara una bala de <code>.357"</code>, cae con los demás .357. Las <b>escopetas</b> usan otra escala, el <b>calibre</b> (<i>gauge</i>), que además es <b>inversa</b>: un <code>12</code> tiene mayor ánima que un <code>20</code>. Van ordenadas por su ánima real y marcadas con la etiqueta <i>Escopeta</i>.</p>`,
   en:`<p class="gp">The way cartridges are named is famous for its lack of logic. More than a system, it is a code inherited from a century and a half of crossed traditions: what is millimeters in one name is hundredths of an inch, a year, or a powder charge nobody uses anymore in another.</p>
    <div class="sec">Anatomy of a name</div>
    <div class="namedec">
@@ -2763,7 +2760,9 @@ const GUIDE={
    <div class="sec">Ignition</div>
    <div class="gdiagram">${SVGPRIMER.en}</div>
    <p class="gcap">The case head: three ignition styles</p>
-   <p class="gp">By ignition there are two families: <b>rimfire</b>, with the priming compound pressed inside the rim —struck on the edge, and not reloadable—, and <b>centerfire</b>, with a removable, reloadable primer. The centerfire primer is either <b>Boxer</b> (self-contained anvil, one flash hole; nearly all U.S. ammo, easy to reload) or <b>Berdan</b> (anvil in the case, two or more flash holes; typically European). Rimfire usually carries its ignition right in the name: hence the <b>.22 LR</b> (Long Rifle), the <b>.17 HMR</b> (Hornady Magnum Rimfire) or the <b>.22 WMR</b> (Winchester Magnum Rimfire).</p>`}},
+   <p class="gp">By ignition there are two families: <b>rimfire</b>, with the priming compound pressed inside the rim —struck on the edge, and not reloadable—, and <b>centerfire</b>, with a removable, reloadable primer. The centerfire primer is either <b>Boxer</b> (self-contained anvil, one flash hole; nearly all U.S. ammo, easy to reload) or <b>Berdan</b> (anvil in the case, two or more flash holes; typically European). Rimfire usually carries its ignition right in the name: hence the <b>.22 LR</b> (Long Rifle), the <b>.17 HMR</b> (Hornady Magnum Rimfire) or the <b>.22 WMR</b> (Winchester Magnum Rimfire).</p>
+   <div class="sec">Why the order doesn't follow the name</div>
+   <p class="gp">Because the name rarely matches the diameter, this reference orders cartridges by the <b>bullet's real diameter</b>, not by their commercial designation. That's why the <code>.380</code> —which sounds bigger than <code>9&nbsp;mm</code>— sits next to it: both measure <code>.355"</code>; and the <code>.38&nbsp;Special</code>, which actually fires a <code>.357"</code> bullet, lands with the other .357s. <b>Shotguns</b> use a different scale, the <b>gauge</b>, which is also <b>inverse</b>: a <code>12</code> has a larger bore than a <code>20</code>. They're ordered by their real bore and tagged <i>Shotgun</i>.</p>`}},
  ident:{rk:{es:"Referencia · Identificación",en:"Reference · Identification"},h2:{es:"Cómo identificar un cartucho",en:"How to identify a cartridge"},cite:CITE,body:{
   es:`<p class="gp">Identificar un cartucho importa al coleccionista, al perito forense y al analista militar. La pista más rápida es el <b>headstamp</b> —la marca estampada en el culote—, pero no siempre alcanza: puede faltar, ser ilegible o engañar si se trata de un wildcat. Cuando el sello no basta, se mide.</p>
    <div class="sec">Qué se mide</div>
@@ -3200,6 +3199,24 @@ function loadTableStatic(cart,U,en){
   const rows=arr.map(r=>{ const v=U.vU==='fps'?r.vfps:r.vms, ee=U.eU==='ft·lb'?r.eftlb:r.ej;
     return '<tr><td>'+escX(r.bw+' '+(r.bt||''))+'</td><td>'+escX(r.pw)+'</td><td>'+(r.ch!=null?fmtN(String(r.ch))+' gr':'—')+'</td><td>'+v+' '+U.vU+'</td><td>'+ee.toLocaleString(numLoc())+' '+U.eU+'</td><td><small>'+escX(r.src||'')+'</small></td></tr>'; }).join('');
   return '<div class="cmptablewrap"><table class="cmptable loadtbl"><thead><tr>'+Th.map(t=>'<th>'+t+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
+}
+let fLoadOpen=false;
+function renderFichaLoads(cart){
+  const wrap=document.getElementById('fichaLoadWrap'); if(!wrap) return;
+  const e=LOADS[cart];
+  if(!e||!e.loads||!e.loads.length){ wrap.innerHTML=''; return; }
+  const en=lang==='en';
+  const title=en?'📋 Manual load tables — Cartridges of the World':'📋 Tablas de carga del manual — Cartridges of the World';
+  let html='<div class="labrow" style="margin:18px 0 2px"><button class="labmbtn'+(fLoadOpen?' on':'')+'" id="fLoadBtn">'+title+'</button></div>';
+  if(fLoadOpen){
+    const ub=['m','imp'].map(u=>'<button class="labmbtn'+(uNow()===u?' on':'')+'" data-fu="'+u+'">'+(u==='m'?(en?'Metric':'Métrico'):'Imperial')+'</button>').join('');
+    html+='<p class="rnote" style="margin:4px 0 8px">'+(en?'Factory and handload data from the manual, for reference (as published).':'Datos de fábrica y de recarga del manual, a modo de referencia (según lo publicado).')+'</p>'
+        +'<div style="display:flex;justify-content:flex-end;gap:7px;margin:0 0 8px">'+ub+'</div>'
+        +loadTableStatic(cart, unitset(uNow()), en);
+  }
+  wrap.innerHTML=html;
+  const b=document.getElementById('fLoadBtn'); if(b) b.addEventListener('click',function(){ fLoadOpen=!fLoadOpen; renderFichaLoads(cart); });
+  wrap.querySelectorAll('.labmbtn[data-fu]').forEach(function(el){ el.addEventListener('click',function(ev){ const nu=ev.target.dataset.fu; if(nu===uNow())return; uPref=nu; renderFichaLoads(cart); }); });
 }
 function renderLab(){
   const U=unitset(labState.unit);
