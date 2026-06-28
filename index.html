@@ -2218,17 +2218,17 @@ function openCompare(){
           ${row(tr.origin[lang], cs.map(c=>c.org))}
         </tbody>
       </table></div>
+      <div style="display:flex;justify-content:flex-end;gap:7px;margin:14px 0 2px">${unitBtnsCmp}</div>
       <div class="sec">${tr.muzzleVel[lang]}</div>
-      <div class="cmpbars">${bars(c=>c.vel,vmax,v=>v,"m/s")}</div>
+      <div class="cmpbars">${bars(c=>c.vel,vmax,v=>Ucmp.v(v),Ucmp.vU)}</div>
       <div class="sec">${tr.muzzleEn[lang]}</div>
-      <div class="cmpbars">${bars(c=>c.E,emax,v=>v.toLocaleString(numLoc()),"J")}</div>
+      <div class="cmpbars">${bars(c=>c.E,emax,v=>Ucmp.e(v).toLocaleString(numLoc()),Ucmp.eU)}</div>
       ${cs.some(c=>recoil(c)!=null)?`<div class="sec">${tr.recoilLabel[lang]}</div>
-      <div class="cmpbars">${bars(c=>recoil(c)||0,rmax||1,v=>v?v.toFixed(1):"—","N·s")}</div>`:""}
+      <div class="cmpbars">${bars(c=>recoil(c)||0,rmax||1,v=>v?Ucmp.p(v):"—",Ucmp.pU)}</div>`:""}
       <div class="sec">${tr.penLabel[lang]}</div>
       <div class="cmpbars">${bars(c=>sd(c)||0,sdmax,v=>fmtN(v.toFixed(3)),"")}</div>
       <div class="sec">${en?'Stopping power (Taylor KO)':'Poder de frenado (Taylor KO)'}</div>
       <div class="cmpbars">${bars(tko,tkomax,v=>fmtN(v.toFixed(1)),"")}</div>
-      <div style="display:flex;justify-content:flex-end;gap:7px;margin:16px 0 0">${unitBtnsCmp}</div>
       <div class="sec">${en?'Retained downrange':'A distancia (retenido)'}</div>
       <div class="cmptablewrap"><table class="cmptable"><thead><tr><th></th>${cols}</tr></thead><tbody>
         ${row(`${en?'Velocity':'Velocidad'} 100 ${Ucmp.distU}`, series2.map(s=>`${Ucmp.v(sampleTr(s.tr,D1m).v)}<small> ${Ucmp.vU}</small>`))}
