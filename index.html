@@ -2244,7 +2244,7 @@ let hsuid=0;
 function headstampDisk(c,cx,cy,R){
   var m=MFG[c.n]; if(!m) return '';
   var u='h'+(hsuid++);
-  var rt=R*0.713, lenC=(''+m.cal).length, lenH=(''+(m.hs||'AA')).length, fsC=(R*0.284*Math.min(1,7/Math.max(1,lenC))).toFixed(2), fsH=(R*0.284*Math.min(1,7/Math.max(1,lenH))).toFixed(2);
+  var BIGR=(c.n==='5,56×45 mm OTAN / .223 Rem'), rt=R*(BIGR?0.745:0.713), lenC=(''+m.cal).length, lenH=(''+(m.hs||'AA')).length, fsC=(R*0.284*Math.min(1,7/Math.max(1,lenC))).toFixed(2), fsH=(R*0.284*Math.min(1,7/Math.max(1,lenH))).toFixed(2);
   var bl=(cx-rt*0.9).toFixed(2), br=(cx+rt*0.9).toFixed(2), by=(cy+rt*0.46).toFixed(2), ty=(cy-rt*0.5).toFixed(2), Rr=rt.toFixed(2);
   var dyL=(R*0.012).toFixed(3), dyD=(-R*0.010).toFixed(3), blurD=(R*0.006).toFixed(3);
   var primer = c.t.indexOf('rimfire')<0
@@ -2261,7 +2261,7 @@ function headstampDisk(c,cx,cy,R){
    +'</defs>'
    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+R.toFixed(2)+'" fill="url(#hf'+u+')" stroke="#544012" stroke-width="'+(R*0.05).toFixed(2)+'"/>'
    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*0.985).toFixed(2)+'" fill="none" stroke="#f9efc6" stroke-opacity=".3" stroke-width="'+(R*0.016).toFixed(2)+'"/>'
-   +'<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*0.58).toFixed(2)+'" fill="none" stroke="#473810" stroke-opacity=".5" stroke-width="'+(R*0.028).toFixed(2)+'"/>'
+   +'<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*(BIGR?0.72:0.58)).toFixed(2)+'" fill="none" stroke="#473810" stroke-opacity=".5" stroke-width="'+(R*0.028).toFixed(2)+'"/>'
    +primer
    +'<text class="hsoro" filter="url(#hse'+u+')" style="font-size:'+fsC+'px"><textPath href="#hb'+u+'" startOffset="50%" text-anchor="middle">'+escX(m.cal)+'</textPath></text>'
    +maker
