@@ -2179,6 +2179,14 @@ function openCompare(){
   const row=(lab,vals)=>`<tr><td>${lab}</td>${vals.map(v=>`<td>${v}</td>`).join("")}</tr>`;
   const fts=c=>Math.round(c.vel*3.281);
   const vmax=Math.max.apply(null,cs.map(c=>c.vel)), emax=Math.max.apply(null,cs.map(c=>c.E)), rmax=Math.max.apply(null,cs.map(c=>recoil(c)||0));
+  const en=lang==='en';
+  const isPi=c=>(c.t||[]).some(t=>t==='pistola'||t==='revólver'||t==='revolver');
+  const series2=cs.map((c,k)=>{var bc=bcEst(c.din,c.m,c.bt,isPi(c));var trj=traj(c.vel,bc,300,100,isPi(c)?0.02:0.04);return {c:c,k:k,bc:bc,tr:trj,mkg:(c.m||0)*GR2KG};});
+  const eAt=(s,xm)=>0.5*s.mkg*Math.pow(sampleTr(s.tr,xm).v,2);
+  const tko=c=>(c.m!=null&&c.din)?(c.m*(c.vel*3.281)*c.din)/7000:0;
+  const sdmax=Math.max.apply(null,cs.map(c=>sd(c)||0))||1;
+  const tkomax=Math.max.apply(null,cs.map(tko))||1;
+  const Ucmp=unitset('m');
   const bars=(get,maxv,fmtv,unit)=>cs.map((c,k)=>{
     const val=get(c), w=Math.max(3,Math.round(val/maxv*100));
     return `<div class="cmpbar"><div class="cl">${c.n}</div><div class="ct"><div class="cf" style="width:${w}%;background:${CMPCOL[k]}"></div></div><div class="cv">${fmtv(val)} ${unit}</div></div>`;
@@ -2212,6 +2220,22 @@ function openCompare(){
       <div class="cmpbars">${bars(c=>c.E,emax,v=>v.toLocaleString(numLoc()),"J")}</div>
       ${cs.some(c=>recoil(c)!=null)?`<div class="sec">${tr.recoilLabel[lang]}</div>
       <div class="cmpbars">${bars(c=>recoil(c)||0,rmax||1,v=>v?v.toFixed(1):"—","N·s")}</div>`:""}
+      <div class="sec">${tr.penLabel[lang]}</div>
+      <div class="cmpbars">${bars(c=>sd(c)||0,sdmax,v=>fmtN(v.toFixed(3)),"")}</div>
+      <div class="sec">${en?'Stopping power (Taylor KO)':'Poder de frenado (Taylor KO)'}</div>
+      <div class="cmpbars">${bars(tko,tkomax,v=>fmtN(v.toFixed(1)),"")}</div>
+      <div class="sec">${en?'Retained downrange':'A distancia (retenido)'}</div>
+      <div class="cmptablewrap"><table class="cmptable"><thead><tr><th></th>${cols}</tr></thead><tbody>
+        ${row(en?'Velocity 100 m':'Velocidad 100 m', series2.map(s=>`${Math.round(sampleTr(s.tr,100).v)}<small> m/s</small>`))}
+        ${row(en?'Energy 100 m':'Energía 100 m', series2.map(s=>`${Math.round(eAt(s,100)).toLocaleString(numLoc())}<small> J</small>`))}
+        ${row(en?'Velocity 300 m':'Velocidad 300 m', series2.map(s=>`${Math.round(sampleTr(s.tr,300).v)}<small> m/s</small>`))}
+        ${row(en?'Energy 300 m':'Energía 300 m', series2.map(s=>`${Math.round(eAt(s,300)).toLocaleString(numLoc())}<small> J</small>`))}
+        ${row(en?'Drop 300 m':'Caída 300 m', series2.map(s=>`${Math.round(sampleTr(s.tr,300).path*100)}<small> cm</small>`))}
+      </tbody></table></div>
+      <div class="sec">${en?'Drop · zeroed at 100 m':'Caída · cero a 100 m'}</div>
+      <div class="gdiagram" style="padding:10px 6px 4px">${labChart(series2,'path',300,100,Ucmp,'auto',CMPCOL)}</div>
+      <p class="cmphint">${en?'Bullet drop, 0–300 m. Trajectory from estimated G1 BC and nominal muzzle velocity — an illustrative comparison, not a ballistic solution.':'Caída de bala, 0–300 m. Trayectoria con BC G1 estimado y velocidad de boca nominal — comparación ilustrativa, no una solución balística.'}</p>
+
     </div>`;
   document.getElementById("xbtn").addEventListener("click",closeDetail);
   ov.classList.add("on"); document.body.style.overflow="hidden"; panel.scrollTop=0;
@@ -3117,7 +3141,7 @@ function unitset(u){ return u==='imp'
 const fmtN=n=>lang==="en"?String(n):String(n).replace(".",",");
 function shortN(n){ return n.length>20?n.slice(0,20)+'…':n; }
 
-function labChart(series, metric, maxR, distM, U, scale){
+function labChart(series, metric, maxR, distM, U, scale, cols){ cols=cols||LCOL;
   const W=640,H=262,padL=48,padR=14,padT=12,padB=28, pw=W-padL-padR, ph=H-padT-padB;
   const val=(s,p)=> metric==='path'?U.d(p.path*100):(metric==='vel'?U.v(p.v):U.e(0.5*s.mkg*p.v*p.v));
   let lo,hi;
@@ -3138,7 +3162,7 @@ function labChart(series, metric, maxR, distM, U, scale){
   for(let i=0;i<=4;i++){ const v=lo+(hi-lo)*i/4, yy=Y(v); g+='<line x1="'+padL+'" y1="'+yy.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+yy.toFixed(1)+'" stroke="#1b202a" stroke-width="1"/>'; g+='<text x="'+(padL-5)+'" y="'+(yy+3).toFixed(1)+'" fill="#6f6b63" font-size="9.5" font-family="ui-monospace,monospace" text-anchor="end">'+(metric==='energy'?Math.round(v):Math.round(v*10)/10)+'</text>'; }
   if(metric==='path'){ const y0=Y(0); g+='<line x1="'+padL+'" y1="'+y0.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+y0.toFixed(1)+'" stroke="#5fb0a8" stroke-opacity=".5" stroke-width="1.2" stroke-dasharray="4 3"/>'; }
   g+='<line x1="'+X(distM).toFixed(1)+'" y1="'+padT+'" x2="'+X(distM).toFixed(1)+'" y2="'+(padT+ph)+'" stroke="#e9e7e1" stroke-opacity=".35" stroke-width="1.2"/>';
-  series.forEach((s,k)=>{ let dd='',first=true; s.tr.forEach(p=>{ if(p.x>maxR)return; dd+=(first?'M':'L')+X(p.x).toFixed(1)+' '+Yc(val(s,p)).toFixed(1); first=false; }); g+='<path d="'+dd+'" fill="none" stroke="'+LCOL[k]+'" stroke-width="2.1"/>'; });
+  series.forEach((s,k)=>{ let dd='',first=true; s.tr.forEach(p=>{ if(p.x>maxR)return; dd+=(first?'M':'L')+X(p.x).toFixed(1)+' '+Yc(val(s,p)).toFixed(1); first=false; }); g+='<path d="'+dd+'" fill="none" stroke="'+cols[k]+'" stroke-width="2.1"/>'; });
   g+='</svg>'; return g;
 }
 function barsGen(series, valfn, fmt){
