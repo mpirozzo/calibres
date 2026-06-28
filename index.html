@@ -2170,6 +2170,8 @@ trayItems.addEventListener("click",e=>{const b=e.target.closest("button[data-rm]
 });
 trayGo.addEventListener("click",()=>{ if(compareSet.length>=2) openCompare(); });
 
+let uPref=null;
+function uNow(){ return uPref!=null?uPref:((typeof lang!=='undefined'&&lang==='en')?'imp':'m'); }
 function openCompare(){
   curCompare=true;curDetail=null;
   const idx=compareSet.slice(), cs=idx.map(i=>C[i]);
@@ -2180,13 +2182,15 @@ function openCompare(){
   const fts=c=>Math.round(c.vel*3.281);
   const vmax=Math.max.apply(null,cs.map(c=>c.vel)), emax=Math.max.apply(null,cs.map(c=>c.E)), rmax=Math.max.apply(null,cs.map(c=>recoil(c)||0));
   const en=lang==='en';
+  const Ucmp=unitset(uNow());
+  const Zm=Ucmp.toM(100), D1m=Ucmp.toM(100), D2m=Ucmp.toM(300);
   const isPi=c=>(c.t||[]).some(t=>t==='pistola'||t==='revólver'||t==='revolver');
-  const series2=cs.map((c,k)=>{var bc=bcEst(c.din,c.m,c.bt,isPi(c));var trj=traj(c.vel,bc,300,100,isPi(c)?0.02:0.04);return {c:c,k:k,bc:bc,tr:trj,mkg:(c.m||0)*GR2KG};});
+  const series2=cs.map((c,k)=>{var bc=bcEst(c.din,c.m,c.bt,isPi(c));var trj=traj(c.vel,bc,D2m+8,Zm,isPi(c)?0.02:0.04);return {c:c,k:k,bc:bc,tr:trj,mkg:(c.m||0)*GR2KG};});
   const eAt=(s,xm)=>0.5*s.mkg*Math.pow(sampleTr(s.tr,xm).v,2);
   const tko=c=>(c.m!=null&&c.din)?(c.m*(c.vel*3.281)*c.din)/7000:0;
   const sdmax=Math.max.apply(null,cs.map(c=>sd(c)||0))||1;
   const tkomax=Math.max.apply(null,cs.map(tko))||1;
-  const Ucmp=unitset('m');
+  const unitBtnsCmp=['m','imp'].map(u=>`<button class="labmbtn${uNow()===u?' on':''}" data-u="${u}">${u==='m'?(en?'Metric':'Métrico'):'Imperial'}</button>`).join('');
   const bars=(get,maxv,fmtv,unit)=>cs.map((c,k)=>{
     const val=get(c), w=Math.max(3,Math.round(val/maxv*100));
     return `<div class="cmpbar"><div class="cl">${c.n}</div><div class="ct"><div class="cf" style="width:${w}%;background:${CMPCOL[k]}"></div></div><div class="cv">${fmtv(val)} ${unit}</div></div>`;
@@ -2224,20 +2228,22 @@ function openCompare(){
       <div class="cmpbars">${bars(c=>sd(c)||0,sdmax,v=>fmtN(v.toFixed(3)),"")}</div>
       <div class="sec">${en?'Stopping power (Taylor KO)':'Poder de frenado (Taylor KO)'}</div>
       <div class="cmpbars">${bars(tko,tkomax,v=>fmtN(v.toFixed(1)),"")}</div>
+      <div style="display:flex;justify-content:flex-end;gap:7px;margin:16px 0 0">${unitBtnsCmp}</div>
       <div class="sec">${en?'Retained downrange':'A distancia (retenido)'}</div>
       <div class="cmptablewrap"><table class="cmptable"><thead><tr><th></th>${cols}</tr></thead><tbody>
-        ${row(en?'Velocity 100 m':'Velocidad 100 m', series2.map(s=>`${Math.round(sampleTr(s.tr,100).v)}<small> m/s</small>`))}
-        ${row(en?'Energy 100 m':'Energía 100 m', series2.map(s=>`${Math.round(eAt(s,100)).toLocaleString(numLoc())}<small> J</small>`))}
-        ${row(en?'Velocity 300 m':'Velocidad 300 m', series2.map(s=>`${Math.round(sampleTr(s.tr,300).v)}<small> m/s</small>`))}
-        ${row(en?'Energy 300 m':'Energía 300 m', series2.map(s=>`${Math.round(eAt(s,300)).toLocaleString(numLoc())}<small> J</small>`))}
-        ${row(en?'Drop 300 m':'Caída 300 m', series2.map(s=>`${Math.round(sampleTr(s.tr,300).path*100)}<small> cm</small>`))}
+        ${row(`${en?'Velocity':'Velocidad'} 100 ${Ucmp.distU}`, series2.map(s=>`${Ucmp.v(sampleTr(s.tr,D1m).v)}<small> ${Ucmp.vU}</small>`))}
+        ${row(`${en?'Energy':'Energía'} 100 ${Ucmp.distU}`, series2.map(s=>`${Ucmp.e(eAt(s,D1m)).toLocaleString(numLoc())}<small> ${Ucmp.eU}</small>`))}
+        ${row(`${en?'Velocity':'Velocidad'} 300 ${Ucmp.distU}`, series2.map(s=>`${Ucmp.v(sampleTr(s.tr,D2m).v)}<small> ${Ucmp.vU}</small>`))}
+        ${row(`${en?'Energy':'Energía'} 300 ${Ucmp.distU}`, series2.map(s=>`${Ucmp.e(eAt(s,D2m)).toLocaleString(numLoc())}<small> ${Ucmp.eU}</small>`))}
+        ${row(`${en?'Drop':'Caída'} 300 ${Ucmp.distU}`, series2.map(s=>`${Ucmp.d(sampleTr(s.tr,D2m).path*100)}<small> ${Ucmp.dU}</small>`))}
       </tbody></table></div>
-      <div class="sec">${en?'Drop · zeroed at 100 m':'Caída · cero a 100 m'}</div>
-      <div class="gdiagram" style="padding:10px 6px 4px">${labChart(series2,'path',300,100,Ucmp,'auto',CMPCOL)}</div>
-      <p class="cmphint">${en?'Bullet drop, 0–300 m. Trajectory from estimated G1 BC and nominal muzzle velocity — an illustrative comparison, not a ballistic solution.':'Caída de bala, 0–300 m. Trayectoria con BC G1 estimado y velocidad de boca nominal — comparación ilustrativa, no una solución balística.'}</p>
+      <div class="sec">${en?`Drop · zeroed at 100 ${Ucmp.distU}`:`Caída · cero a 100 ${Ucmp.distU}`}</div>
+      <div class="gdiagram" style="padding:10px 6px 4px">${labChart(series2,'path',D2m,Zm,Ucmp,'auto',CMPCOL)}</div>
+      <p class="cmphint">${en?'Bullet drop. Trajectory from estimated G1 BC and nominal muzzle velocity — an illustrative comparison, not a ballistic solution.':'Caída de bala. Trayectoria con BC G1 estimado y velocidad de boca nominal — comparación ilustrativa, no una solución balística.'}</p>
 
     </div>`;
   document.getElementById("xbtn").addEventListener("click",closeDetail);
+  panel.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===uNow())return; uPref=nu; openCompare(); }));
   ov.classList.add("on"); document.body.style.overflow="hidden"; panel.scrollTop=0;
 }
 
@@ -2537,6 +2543,9 @@ function openDetail(i,fc){
 
       <div class="sec">${tr.secNote[lang]}</div>
       <p class="notes">${pick(c.nt)}</p>${MFG[c.n]&&MFG[c.n].note?'<p class="notes mfg"><b>'+(lang==='en'?'Manufacture':'Fabricaci\u00f3n')+' \u2014 </b>'+pick(MFG[c.n].note)+'</p>':''}
+      ${(LOADS[c.n]&&LOADS[c.n].loads&&LOADS[c.n].loads.length)?`<div class="sec">${lang==='en'?'\ud83d\udccb Manual load tables \u2014 Cartridges of the World':'\ud83d\udccb Tablas de carga del manual \u2014 Cartridges of the World'}</div>
+      <p class="rnote">${lang==='en'?'Factory and handload data from the manual, for reference (as published).':'Datos de f\u00e1brica y de recarga del manual, a modo de referencia (seg\u00fan lo publicado).'}</p>
+      ${loadTableStatic(c.n, unitset(uNow()), lang==='en')}`:''}
     </div>`;
   document.getElementById("xbtn").addEventListener("click",closeDetail);
   panel.querySelectorAll(".fwbtn").forEach(b=>b.addEventListener("click",()=>openWeapon(b.dataset.w)));
@@ -3122,7 +3131,7 @@ let labState=null;
 function initLab(){
   const c0=LABCART.find(n=>n.includes(".308"))||LABCART[0];
   const c1=LABCART.find(n=>n.includes("6,5 Creedmoor"))||LABCART[1]||LABCART[0];
-  const imp=(typeof lang!=='undefined' && lang==='en');
+  const imp=(uNow()==='imp');
   labState={ slots:[defSlot(c0), Object.assign(defSlot(c1),{on:true}), {cart:c0,li:0,bc:null,ch:null,on:false}], dist:imp?182.88:200, zero:imp?91.44:100, metric:'path', maxR:500, unit:imp?'imp':'m', unitManual:false, showTables:false, scale:'fixed' };
 }
 function slotData(slot){
@@ -3183,6 +3192,14 @@ function loadTable(s,U,en){
     return '<tr class="loadrow'+(i===sel?' sel':'')+'" data-k="'+s.slot+'" data-i="'+i+'"><td>'+escX(r.bw+' '+(r.bt||''))+'</td><td>'+escX(r.pw)+'</td><td>'+(r.ch!=null?fmtN(String(r.ch))+' gr':'—')+'</td><td>'+v+' '+U.vU+'</td><td>'+e.toLocaleString(numLoc())+' '+U.eU+'</td><td><small>'+escX(r.src||'')+'</small></td></tr>'; }).join('');
   return '<div class="sec" style="color:'+s.col+'">'+escX(shortN(s.name))+' <small style="color:var(--ink3);font-weight:400">· '+arr.length+(en?' loads':' cargas')+'</small></div>'+
     '<div class="cmptablewrap"><table class="cmptable loadtbl"><thead><tr>'+Th.map(t=>'<th>'+t+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
+}
+function loadTableStatic(cart,U,en){
+  const e=LOADS[cart]; if(!e||!e.loads||!e.loads.length) return '';
+  const arr=e.loads;
+  const Th=en?['Bullet','Powder','Charge','Vel.','Energy','Source']:['Bala','Pólvora','Carga','Vel.','Energía','Fuente'];
+  const rows=arr.map(r=>{ const v=U.vU==='fps'?r.vfps:r.vms, ee=U.eU==='ft·lb'?r.eftlb:r.ej;
+    return '<tr><td>'+escX(r.bw+' '+(r.bt||''))+'</td><td>'+escX(r.pw)+'</td><td>'+(r.ch!=null?fmtN(String(r.ch))+' gr':'—')+'</td><td>'+v+' '+U.vU+'</td><td>'+ee.toLocaleString(numLoc())+' '+U.eU+'</td><td><small>'+escX(r.src||'')+'</small></td></tr>'; }).join('');
+  return '<div class="cmptablewrap"><table class="cmptable loadtbl"><thead><tr>'+Th.map(t=>'<th>'+t+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 function renderLab(){
   const U=unitset(labState.unit);
@@ -3253,7 +3270,7 @@ function renderLab(){
   const zl=document.getElementById("labzero"); if(zl)zl.addEventListener("change",e=>{labState.zero=parseFloat(e.target.value); renderLab();});
   panellab.querySelectorAll(".labmbtn[data-m]").forEach(el=>el.addEventListener("click",e=>{labState.metric=e.target.dataset.m; renderLab();}));
   panellab.querySelectorAll(".labmbtn[data-sc]").forEach(el=>el.addEventListener("click",e=>{labState.scale=e.target.dataset.sc; renderLab();}));
-  panellab.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===labState.unit)return; labState.unit=nu; labState.unitManual=true; labState.dist=nu==='imp'?182.88:200; labState.zero=nu==='imp'?91.44:100; renderLab();}));
+  panellab.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===labState.unit)return; uPref=nu; labState.unit=nu; labState.unitManual=true; labState.dist=nu==='imp'?182.88:200; labState.zero=nu==='imp'?91.44:100; renderLab();}));
   const tb=document.getElementById("labtbtn"); if(tb)tb.addEventListener("click",()=>{ labState.showTables=!labState.showTables; renderLab(); });
   panellab.querySelectorAll(".loadrow").forEach(el=>el.addEventListener("click",()=>{ const k=+el.dataset.k,i=+el.dataset.i; labState.slots[k].li=i; labState.slots[k].bc=null; labState.slots[k].ch=null; renderLab(); }));
 }
@@ -3309,7 +3326,7 @@ const GAME=[
 ];
 
 let calcState=null;
-function initCalc(){ const imp=(typeof lang!=='undefined'&&lang==='en'); calcState={ mode:'energy', distM:imp?182.88:200, threshJ:1350, zeroM:imp?91.44:100, unit:imp?'imp':'m', unitManual:false, sort:'desc' }; }
+function initCalc(){ const imp=(uNow()==='imp'); calcState={ mode:'energy', distM:imp?182.88:200, threshJ:1350, zeroM:imp?91.44:100, unit:imp?'imp':'m', unitManual:false, sort:'desc' }; }
 
 function calcRows(){
   const m=calcState.mode, U=unitset(calcState.unit), Y=calcState.distM, X=calcState.threshJ, Z=calcState.zeroM;
@@ -3380,7 +3397,7 @@ function renderCalc(){
   panelcalc.querySelectorAll(".labmbtn[data-cm]").forEach(el=>el.addEventListener("click",e=>{calcState.mode=e.target.dataset.cm; renderCalc();}));
   panelcalc.querySelectorAll(".labmbtn[data-csort]").forEach(el=>el.addEventListener("click",e=>{calcState.sort=e.target.dataset.csort; renderCalc();}));
   panelcalc.querySelectorAll(".calclink").forEach(el=>el.addEventListener("click",()=>{ const cart=el.dataset.cart; const idx=C.findIndex(c=>c.n===cart); if(idx>=0){ closeCalc(); openDetail(idx,true); } }));
-  panelcalc.querySelectorAll(".labmbtn[data-cu]").forEach(el=>el.addEventListener("click",e=>{const nu=e.target.dataset.cu; if(nu===calcState.unit)return; calcState.unit=nu; calcState.unitManual=true; calcState.distM=nu==='imp'?182.88:200; calcState.zeroM=nu==='imp'?91.44:100; renderCalc();}));
+  panelcalc.querySelectorAll(".labmbtn[data-cu]").forEach(el=>el.addEventListener("click",e=>{const nu=e.target.dataset.cu; if(nu===calcState.unit)return; uPref=nu; calcState.unit=nu; calcState.unitManual=true; calcState.distM=nu==='imp'?182.88:200; calcState.zeroM=nu==='imp'?91.44:100; renderCalc();}));
   panelcalc.querySelectorAll(".gamerow").forEach(el=>el.addEventListener("click",()=>{ calcState.threshJ=+el.dataset.j; if(calcState.mode!=='energy'&&calcState.mode!=='range')calcState.mode='energy'; renderCalc(); }));
   const cd=document.getElementById("calcdist"); if(cd)cd.addEventListener("input",e=>{calcState.distM=unitset(calcState.unit).toM(+e.target.value); const v=document.getElementById("calcdistv"); if(v)v.textContent=e.target.value+' '+U.distU; renderCalc();});
   const ct=document.getElementById("calcthr"); if(ct)ct.addEventListener("change",e=>{ let val=parseFloat(e.target.value)||0; calcState.threshJ=calcState.unit==='imp'?val/0.737562:val; renderCalc(); });
