@@ -3469,7 +3469,7 @@ function hsResults(q){
       body=ms.slice(0,40).map(function(e){
         var carts=hsCartsFor(e.k);
         var fichas=carts.length?'<div class="hsficha"><b>'+(en?'In this app: ':'En esta app: ')+'</b>'+carts.map(function(idx){return '<button class="hschip ficha" data-c="'+idx+'">'+escX(C[idx].n)+'</button>';}).join(' ')+'</div>':'';
-        return '<div class="hscard"><div class="hshead"><span class="hscode">'+escX(e.c)+'</span><span class="hsmaker">'+escX(e.m)+'</span></div><div class="hsmeta">'+escX(e.co)+(e.yr?' · '+escX(e.yr):'')+'</div><p class="hsnote">'+escX(en?e.note.en:e.note.es)+'</p>'+fichas+'<p class="hssrc">'+(en?'Source: ':'Fuente: ')+escX(e.src)+'</p></div>';
+        return '<div class="hscard"><div class="hshead"><span class="hscode">'+escX(e.c)+'</span><span class="hsmaker">'+escX(e.m)+'</span></div><div class="hsmeta">'+escX(e.co)+(e.yr?' · '+escX(e.yr):'')+'</div><p class="hsnote">'+escX(en?e.note.en:e.note.es)+'</p>'+fichas+'</div>';
       }).join('');
       if(ms.length>40) body+='<p class="rnote" style="text-align:center">'+(en?'Showing the first 40 matches.':'Mostrando los primeros 40.')+'</p>';
     }
