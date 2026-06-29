@@ -53,6 +53,8 @@
 .rfill{height:100%;background:linear-gradient(90deg,var(--brass-d),var(--brass))}
 .rval{font-family:var(--mono);font-size:12px;color:var(--ink2);min-width:64px;text-align:right}
 .rnote{font-size:12px;color:var(--ink3);margin:0 0 4px;line-height:1.45}
+.errrep{display:block;text-align:center;margin:26px auto 4px;font-size:12px;color:var(--ink3);text-decoration:none;transition:color .15s}
+.errrep:hover{color:var(--brass)}
 .quizpair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 14px}
 .qchoice{display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;min-height:98px;padding:14px 10px;background:var(--panel2);border:1px solid var(--line2);border-radius:12px;color:var(--ink);cursor:pointer;text-align:center;transition:border-color .12s,background .12s}
 .qchoice:hover:not(:disabled){border-color:var(--brass-d)}
@@ -2540,6 +2542,7 @@ function openDetail(i,fc){
       <div class="sec">${tr.secNote[lang]}</div>
       <p class="notes">${pick(c.nt)}</p>${MFG[c.n]&&MFG[c.n].note?'<p class="notes mfg"><b>'+(lang==='en'?'Manufacture':'Fabricaci\u00f3n')+' \u2014 </b>'+pick(MFG[c.n].note)+'</p>':''}
       <div id="fichaLoadWrap"></div>
+      <a class="errrep" href="https://www.instagram.com/dr.pirozzo_neurocirujano/" target="_blank" rel="noopener">${lang==='en'?'Found an error? Let me know on Instagram':'¿Encontraste un error? Avisame por Instagram'}</a>
     </div>`;
   document.getElementById("xbtn").addEventListener("click",closeDetail);
   panel.querySelectorAll(".fwbtn").forEach(b=>b.addEventListener("click",()=>openWeapon(b.dataset.w)));
