@@ -2236,7 +2236,7 @@ function openCompare(){
   panel.innerHTML=`
     <div class="phead">
       <div class="t"><div class="rk">${tr.cmpRk[lang](cs.length)}</div><h2>${tr.cmpTitle[lang]}</h2></div>
-      <button class="pshare" onclick="shareFicha(${i})" title="Compartir ficha / Share" aria-label="Compartir ficha / Share"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button><button class="pprint" onclick="window.print()" title="Imprimir ficha / Print" aria-label="Imprimir ficha / Print"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="x" id="xbtn" aria-label="${tr.close[lang]}">×</button>
+      <button class="pprint" onclick="window.print()" title="Imprimir ficha / Print" aria-label="Imprimir ficha / Print"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="x" id="xbtn" aria-label="${tr.close[lang]}">×</button>
     </div>
     <div class="pbody">
       <div class="cmpleghdr">${legend}</div>
@@ -2549,7 +2549,7 @@ function openDetail(i,fc){
         <h2>${c.n}</h2>
         ${c.ak?`<div class="ak">${c.ak}</div>`:""}
       </div>
-      <button class="pprint" onclick="window.print()" title="Imprimir ficha / Print" aria-label="Imprimir ficha / Print"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="x" id="xbtn" aria-label="${tr.close[lang]}">×</button>
+      <button class="pshare" onclick="shareFicha(${i})" title="Compartir ficha / Share" aria-label="Compartir ficha / Share"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button><button class="pprint" onclick="window.print()" title="Imprimir ficha / Print" aria-label="Imprimir ficha / Print"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="x" id="xbtn" aria-label="${tr.close[lang]}">×</button>
     </div>
     <div class="pbody">${curFromCalc?'<button class="backbtn" onclick="closeDetail();openCalc()">← '+(lang==='en'?'Back to hunting calculator':'Volver a la calculadora')+'</button>':''}
       <div class="diagram">${diagram}</div>
