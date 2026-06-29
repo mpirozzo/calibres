@@ -439,6 +439,36 @@ body:has(.overlay.on) .printfloat{display:inline-flex}
 .hsoro{font-family:'HS',"Arial Narrow",sans-serif;font-weight:700;letter-spacing:.4px;fill:#54400f}
 .notes.mfg{margin-top:8px}
 @media print{.hsoro{fill:#3a2c0d!important;filter:none!important}}
+
+.pshare{flex:none;width:38px;height:38px;border-radius:11px;border:1px solid var(--line2);background:var(--bg2);color:var(--ink2);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.pshare:hover{border-color:var(--brass-d);color:var(--brass)}
+.phead .pprint,.phead .pshare{margin-right:8px}
+@media (pointer:coarse){.pshare{width:42px;height:42px}}
+.ptip{position:relative}
+.ptip::after{content:attr(data-tip);position:absolute;top:calc(100% + 7px);right:0;background:#15181f;border:1px solid var(--line2);color:var(--brass);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 8px;border-radius:6px;white-space:nowrap;opacity:0;transform:translateY(-3px);pointer-events:none;transition:opacity .15s,transform .15s;z-index:40}
+.ptip:hover::after{opacity:1;transform:translateY(0)}
+@media (pointer:coarse){.ptip::after{display:none}}
+.cv-toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--brass);color:#1a1408;font-family:var(--mono);font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:200;box-shadow:0 6px 24px rgba(0,0,0,.45);opacity:0;transition:opacity .2s;pointer-events:none}
+.cv-toast.on{opacity:1}
+@media print{
+  body{background:#fff!important}
+  .wrap,#ovq,#ovg,#ovlab,#ovcalc,#ovhs{display:none!important}
+  #ov.on{position:static!important;background:#fff!important;backdrop-filter:none!important}
+  #ov.on .panel{background:#fff!important;color:#1a1a1a!important;box-shadow:none!important;max-width:100%!important;width:100%!important;border:0!important;border-radius:0!important}
+  #ov.on .phead{background:#fff!important;border-color:#ddd!important}
+  #ov.on .phead h2{color:#1a1a1a!important}
+  #ov.on .rk,#ov.on .ak{color:#7a5c12!important}
+  .pshare,.pprint,.x,.errrep,.tolab,.backbtn{display:none!important}
+  #ov.on .sec{color:#7a5c12!important;border-color:#ddd!important}
+  #ov.on .bignums .bn{background:#f5f3ee!important;border-color:#ddd!important}
+  #ov.on .bn .l{color:#666!important}
+  #ov.on .bn .v,#ov.on .bn .v small,#ov.on .specs td,#ov.on .uses,#ov.on .notes,#ov.on .rval,#ov.on .synline{color:#222!important}
+  #ov.on .specs td{border-color:#e6e6e6!important}
+  #ov.on .diagram{background:#fff!important;border:1px solid #ddd!important}
+  #ov.on .legend span{color:#555!important}
+  #ov.on .recoil .rbar{background:#eee!important}
+  #ov.on .fw .fwbtn,#ov.on .fw span{color:#222!important;border-color:#ccc!important;background:#f7f5f0!important}
+}
 </style>
 </head>
 <body data-lang="es">
@@ -2532,7 +2562,7 @@ function openDetail(i,fc){
         <h2>${c.n}</h2>
         ${c.ak?`<div class="ak">${c.ak}</div>`:""}
       </div>
-      <button class="pprint" onclick="window.print()" title="Imprimir ficha / Print" aria-label="Imprimir ficha / Print"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="x" id="xbtn" aria-label="${tr.close[lang]}">×</button>
+      <button class="pprint ptip" data-tip="${lang==='en'?'Print':'Imprimir'}" onclick="window.print()" aria-label="${lang==='en'?'Print':'Imprimir'}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="pshare ptip" data-tip="${lang==='en'?'Share':'Compartir'}" onclick="shareFicha(${i})" aria-label="${lang==='en'?'Share':'Compartir'}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/></svg></button><button class="x" id="xbtn" aria-label="${tr.close[lang]}">×</button>
     </div>
     <div class="pbody">${curFromCalc?'<button class="backbtn" onclick="closeDetail();openCalc()">← '+(lang==='en'?'Back to hunting calculator':'Volver a la calculadora')+'</button>':''}
       <div class="diagram">${diagram}</div>
@@ -2570,11 +2600,11 @@ function openDetail(i,fc){
   document.getElementById("xbtn").addEventListener("click",closeDetail);
   panel.querySelectorAll(".fwbtn").forEach(b=>b.addEventListener("click",()=>openWeapon(b.dataset.w)));
   var _tl=panel.querySelector(".tolab"); if(_tl)_tl.addEventListener("click",()=>{ const cart=_tl.dataset.cart; closeDetail(); if(!labState)initLab(); labState.slots[0]=defSlot(cart); labState.slots[0].on=true; openLab(); });
-  fLoadOpen=false; renderFichaLoads(c.n);
+  fLoadOpen=false; renderFichaLoads(c.n); try{history.replaceState(null,"",location.pathname+"?c="+encodeURIComponent(cSlug(c.n)));}catch(e){}
   ov.classList.add("on"); document.body.style.overflow="hidden"; panel.scrollTop=0;
 }
 function culote(rt){return{"sin pestaña":tr.rimless[lang],"pestaña":tr.rimmed[lang],"semi-pestaña":tr.semirimmed[lang],"cinturón":tr.belted[lang],"rebajada":tr.rebated[lang]}[rt]||rt;}
-function closeDetail(){ov.classList.remove("on");ov2.classList.remove("on");document.body.style.overflow="";}
+function closeDetail(){ov.classList.remove("on");ov2.classList.remove("on");document.body.style.overflow="";try{history.replaceState(null,"",location.pathname);}catch(e){}}
 ov.addEventListener("click",e=>{if(e.target===ov)closeDetail();});
 
 /* ===================== FICHA DE ARMA (overlay apilado) ===================== */
@@ -3518,6 +3548,13 @@ function setLang(l){
 }
 var _lt=document.querySelector(".langtog"); if(_lt) _lt.addEventListener("click",function(e){var b=e.target.closest("button[data-l]"); if(b) setLang(b.dataset.l);});
 try{setLang(lang);}catch(err){console.error(err);}
+/* ===== Compartir ficha ===== */
+function cSlug(name){return (''+name).toLowerCase().replace(/×/g,'x').replace(/\+/g,'-plus-').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
+function shareUrlFor(i){return location.origin+location.pathname+'?c='+encodeURIComponent(cSlug(C[i].n));}
+function cvToast(msg){var t=document.createElement('div');t.className='cv-toast';t.textContent=msg;document.body.appendChild(t);requestAnimationFrame(function(){t.classList.add('on');});setTimeout(function(){t.classList.remove('on');setTimeout(function(){t.remove();},250);},1600);}
+function shareFicha(i){var c=C[i],url=shareUrlFor(i),en=lang==='en';var text=c.n+(en?' — ammunition reference':' — referencia de munición');if(navigator.share){navigator.share({title:c.n,text:text,url:url}).catch(function(){});}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){cvToast(en?'Link copied':'Link copiado');},function(){window.prompt(en?'Copy this link:':'Copiá este link:',url);});}else{window.prompt(en?'Copy this link:':'Copiá este link:',url);}}
+/* deep-link ?c=slug -> abrir ficha */
+(function(){try{var p=new URLSearchParams(location.search);var cv=p.get('c');if(!cv)return;var qk=cSlug(decodeURIComponent(cv));var idx=-1;for(var j=0;j<C.length;j++){if(cSlug(C[j].n)===qk){idx=j;break;}}if(idx<0&&/^[0-9]+$/.test(cv))idx=(+cv)-1;if(idx>=0)openDetail(idx);}catch(e){}})();
 
 /* autochequeo de coherencia (silencioso; se activa con ?debug en la URL) */
 if(location.search.indexOf("debug")>=0){(function(){var K=0.00006479891,bad=[];
