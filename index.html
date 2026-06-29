@@ -468,7 +468,7 @@ body:has(.overlay.on) .printfloat{display:inline-flex}
 
     <div class="guides">
       <button class="guidebtn" data-g="nomen" style="--ac:var(--brass-d)"><span class="garr">›</span><span class="gk"><span class="l-es">Del libro</span><span class="l-en">From the book</span></span><span class="gt"><span class="l-es">Nomenclatura</span><span class="l-en">Nomenclature</span></span><span class="gd"><span class="l-es">Cómo se nombran los cartuchos</span><span class="l-en">How cartridges are named</span></span></button>
-      <button class="guidebtn" data-g="ident" style="--ac:var(--brass-d)"><span class="garr">›</span><span class="gk"><span class="l-es">Del libro</span><span class="l-en">From the book</span></span><span class="gt"><span class="l-es">Identificar un cartucho</span><span class="l-en">Identify a cartridge</span></span><span class="gd"><span class="l-es">Headstamp, culote y medidas</span><span class="l-en">Headstamp, rim and measuring</span></span></button>
+      <button class="guidebtn" data-g="ident" style="--ac:var(--brass-d)"><span class="garr">›</span><span class="gk"><span class="l-es">Del libro</span><span class="l-en">From the book</span></span><span class="gt"><span class="l-es">Identificar un cartucho</span><span class="l-en">Identify a cartridge</span></span><span class="gd"><span class="l-es">Culote, medidas y marcas</span><span class="l-en">Headstamp, dimensions, markings</span></span></button>
       <button class="guidebtn" data-g="histo" style="--ac:var(--copper)"><span class="garr">›</span><span class="gk"><span class="l-es">Del libro</span><span class="l-en">From the book</span></span><span class="gt"><span class="l-es">Historia del cartucho</span><span class="l-en">History of the cartridge</span></span><span class="gd"><span class="l-es">De la pólvora negra a hoy</span><span class="l-en">From black powder to today</span></span></button>
       <button class="guidebtn" data-g="term" style="--ac:var(--militar)"><span class="garr">›</span><span class="gk"><span class="l-es">Referencia</span><span class="l-en">Reference</span></span><span class="gt"><span class="l-es">Balística terminal</span><span class="l-en">Terminal ballistics</span></span><span class="gd"><span class="l-es">Penetración, expansión y poder de detención</span><span class="l-en">Penetration, expansion &amp; stopping power</span></span></button>
       <button class="guidebtn" data-g="calc" style="--ac:var(--escopeta)"><span class="garr">›</span><span class="gk"><span class="l-es">Herramienta</span><span class="l-en">Tool</span></span><span class="gt"><span class="l-es">Calculadora de caza</span><span class="l-en">Hunting calculator</span></span><span class="gd"><span class="l-es">Buscar municiones por criterio</span><span class="l-en">Find loads by criteria</span></span></button>
@@ -2205,11 +2205,11 @@ function openCompare(){
         <thead><tr><th></th>${cols}</tr></thead>
         <tbody>
           ${row(tr.diameter[lang], cs.map(c=>`${fmt(c.dmm)}<small> mm · ${fmt(c.din)}"</small>`))}
-          ${row(tr.caseLen[lang], cs.map(c=>`${fmt(c.cl)}<small> mm</small>`))}
-          ${row(tr.oalShort[lang], cs.map(c=>`${fmt(c.oal)}<small> mm</small>`))}
+          ${row(tr.caseLen[lang], cs.map(c=>`${fmt(c.cl)}<small> mm · ${fmt((c.cl/25.4).toFixed(2))}"</small>`))}
+          ${row(tr.oalShort[lang], cs.map(c=>`${fmt(c.oal)}<small> mm · ${fmt((c.oal/25.4).toFixed(2))}"</small>`))}
           ${row(tr.bulletLoad[lang], cs.map(c=>c.shell?c.load:c.gr))}
           ${row(tr.velocity[lang], cs.map(c=>`${c.vel}<small> m/s · ${fts(c)} ft/s</small>`))}
-          ${row(tr.energy[lang], cs.map(c=>`${c.E.toLocaleString(numLoc())}<small> J</small>`))}
+          ${row(tr.energy[lang], cs.map(c=>`${c.E.toLocaleString(numLoc())}<small> J · ${Math.round(c.E*0.737562).toLocaleString(numLoc())} ft·lb</small>`))}
           ${row(tr.year[lang], cs.map(c=>String(c.yr)))}
           ${row(tr.origin[lang], cs.map(c=>c.org))}
         </tbody>
@@ -2239,7 +2239,7 @@ function openCompare(){
 
     </div>`;
   document.getElementById("xbtn").addEventListener("click",closeDetail);
-  panel.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===uNow())return; uPref=nu; openCompare(); }));
+  panel.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===uNow())return; const sc=panel.scrollTop; uPref=nu; openCompare(); panel.scrollTop=sc; }));
   ov.classList.add("on"); document.body.style.overflow="hidden"; panel.scrollTop=0;
 }
 
@@ -2470,13 +2470,13 @@ function openDetail(i,fc){
         <span style="color:var(--ink3)">${tr.rulerReal[lang]}</span>`;
   const bignumsHTML = sh ? `
         <div class="bn"><div class="l">${tr.bnBore[lang]}</div><div class="v">${fmt(c.dmm)} <small>mm · ${fmt(c.din)}"</small></div></div>
-        <div class="bn"><div class="l">${tr.caseLen[lang]}</div><div class="v">${fmt(c.oal)} <small>mm</small></div></div>
+        <div class="bn"><div class="l">${tr.caseLen[lang]}</div><div class="v">${fmt(c.oal)} <small>mm · ${fmt((c.oal/25.4).toFixed(2))}"</small></div></div>
         <div class="bn"><div class="l">${tr.muzzleVel[lang]}</div><div class="v">${c.vel} <small>m/s · ${fts} ft/s</small></div></div>
         <div class="bn"><div class="l">${tr.bnLoad[lang]}</div><div class="v" style="font-size:15px">${c.load}</div></div>` : `
         <div class="bn"><div class="l">${tr.bnBulletDia[lang]}</div><div class="v">${fmt(c.dmm)} <small>mm · ${fmt(c.din)}"</small></div></div>
-        <div class="bn"><div class="l">${tr.oalShort[lang]}</div><div class="v">${fmt(c.oal)} <small>mm</small></div></div>
+        <div class="bn"><div class="l">${tr.oalShort[lang]}</div><div class="v">${fmt(c.oal)} <small>mm · ${fmt((c.oal/25.4).toFixed(2))}"</small></div></div>
         <div class="bn"><div class="l">${tr.muzzleVel[lang]}</div><div class="v">${c.vel} <small>m/s · ${fts} ft/s</small></div></div>
-        <div class="bn"><div class="l">${tr.muzzleEn[lang]}</div><div class="v">${c.E.toLocaleString(numLoc())} <small>J · ${ftlb.toLocaleString(numLoc())} ft·lbf</small></div></div>`;
+        <div class="bn"><div class="l">${tr.muzzleEn[lang]}</div><div class="v">${c.E.toLocaleString(numLoc())} <small>J · ${ftlb.toLocaleString(numLoc())} ft·lb</small></div></div>`;
   const specsHTML = sh ? `
       <table class="specs">
         <tr><td>${tr.specGauge[lang]}</td><td>${c.gauge}</td></tr>
@@ -2491,11 +2491,11 @@ function openDetail(i,fc){
       </table>` : `
       <table class="specs">
         <tr><td>${tr.bnBulletDia[lang]}</td><td>${fmt(c.dmm)} mm  /  ${fmt(c.din)} "</td></tr>
-        <tr><td>${tr.caseLen[lang]}</td><td>${fmt(c.cl)} mm</td></tr>
-        <tr><td>${tr.specOAL[lang]}</td><td>${fmt(c.oal)} mm</td></tr>
+        <tr><td>${tr.caseLen[lang]}</td><td>${fmt(c.cl)} mm  ·  ${fmt((c.cl/25.4).toFixed(2))}"</td></tr>
+        <tr><td>${tr.specOAL[lang]}</td><td>${fmt(c.oal)} mm  ·  ${fmt((c.oal/25.4).toFixed(2))}"</td></tr>
         <tr><td>${tr.specBulletWt[lang]}</td><td>${c.gr}</td></tr>
         <tr><td>${tr.muzzleVel[lang]}</td><td>${c.vel} m/s  ·  ${fts} ft/s</td></tr>
-        <tr><td>${tr.muzzleEn[lang]}</td><td>${c.E.toLocaleString(numLoc())} J  ·  ${ftlb.toLocaleString(numLoc())} ft·lbf</td></tr>
+        <tr><td>${tr.muzzleEn[lang]}</td><td>${c.E.toLocaleString(numLoc())} J  ·  ${ftlb.toLocaleString(numLoc())} ft·lb</td></tr>
         <tr><td>${tr.specCaseProf[lang]}</td><td>${c.g.prof==="botella"?tr.profBottle[lang]:tr.profStraight[lang]}</td></tr>
         <tr><td>${tr.specRimType[lang]}</td><td>${culote(c.g.rt)}</td></tr>
         <tr><td>${tr.yearOrigin[lang]}</td><td>${c.yr} · ${c.org}</td></tr>
@@ -2520,7 +2520,7 @@ function openDetail(i,fc){
       <div class="sec">${tr.secSpecs[lang]}</div>
       ${specsHTML}
       ${c.m!=null?`<div class="sec">${tr.recoilLabel[lang]}</div>
-      <div class="recoil"><div class="rbar"><div class="rfill" style="width:${Math.round(recoil(c)/RMAX*100)}%"></div></div><div class="rval">${recoil(c).toFixed(1)} N·s</div></div>
+      <div class="recoil"><div class="rbar"><div class="rfill" style="width:${Math.round(recoil(c)/RMAX*100)}%"></div></div><div class="rval">${recoil(c).toFixed(1)} N·s  ·  ${(recoil(c)*0.224809).toFixed(2)} lb·s</div></div>
       <p class="rnote">${tr.recoilNote[lang]}</p>`:""}
       ${c.m!=null?`<div class="sec">${tr.penLabel[lang]}</div>
       <div class="recoil"><div class="rbar"><div class="rfill" style="width:${Math.round(sdPct(c))}%"></div></div><div class="rval">${sd(c).toFixed(3)} · ${tr.penWords[lang][penLevel(sd(c))]}</div></div>
@@ -2798,7 +2798,7 @@ const GUIDE={
      <tr><td>Largo total</td><td>3,340″</td></tr>
    </table>
    <p class="gp" style="margin-top:8px">…es, nada menos, el <b>.30-06 Springfield</b>. Ojo: el headstamp puede engañar —hubo pedidos especiales, recargadores comerciales y aficionados— así que la medida manda.</p>
-   <div class="sec">El headstamp en detalle</div>
+   <div class="sec">El culote en detalle</div>
    <p class="gp">El sello del culote se lee como un reloj. En lo militar el <b>fabricante</b> va casi siempre a las <b>12</b> y, abajo a las <b>6</b>, el <b>año</b> (2 ó 4 dígitos); pueden sumarse mes o trimestre, número de lote y la <b>marca OTAN</b> (una cruz «+»). En lo civil suele ir la marca arriba y el <b>calibre</b> abajo —por ejemplo <code>WIN</code> / <code>9 mm LUGER</code>.</p>
    <div class="gdiagram">${HSDIAG}</div>
    <p class="gcap">Ejemplo militar: «LC 67» = Lake City, 1967, con marca OTAN (+)</p>
@@ -3269,7 +3269,7 @@ function renderLab(){
     '<p class="gcap">'+T.metric[metricKeys.indexOf(labState.metric)]+' ('+metricUnit[labState.metric]+') · 0–'+U.dist(labState.maxR)+' '+U.distU+'</p>'+
     '<div class="sec">'+T.eMuzzle+'</div><div class="cmpbars">'+bars(series,s=>s.ej,U)+'</div>'+
     '<div class="sec">'+T.eAt+distNom+' '+U.distU+'</div><div class="cmpbars">'+bars(series,s=>0.5*s.mkg*Math.pow(sampleTr(s.tr,distM).v,2),U)+'</div>'+
-    '<div class="sec">'+T.recoil+'</div><div class="cmpbars">'+barsGen(series,function(s){return s.mkg*s.vms;},function(v){return fmtN(v.toFixed(1))+' N·s';})+'</div>'+'<div class="sec">'+T.pen+'</div><div class="cmpbars">'+barsGen(series,function(s){var L=LOADS[s.name];var din=(L&&L.din)||0.30;return (s.bw/7000)/(din*din);},function(v){return v.toFixed(3);})+'</div>'+'<div class="sec">'+T.impact+distNom+' '+U.distU+'</div>'+
+    '<div class="sec">'+T.recoil+'</div><div class="cmpbars">'+barsGen(series,function(s){return s.mkg*s.vms;},function(v){return U.p(v)+' '+U.pU;})+'</div>'+'<div class="sec">'+T.pen+'</div><div class="cmpbars">'+barsGen(series,function(s){var L=LOADS[s.name];var din=(L&&L.din)||0.30;return (s.bw/7000)/(din*din);},function(v){return v.toFixed(3);})+'</div>'+'<div class="sec">'+T.impact+distNom+' '+U.distU+'</div>'+
     '<div class="cmptablewrap"><table class="cmptable labtable"><thead><tr><th>'+T.muni+'</th><th>'+T.mv+'</th><th>'+T.vel+'</th><th>'+T.en+'</th><th>'+T.drop+'</th><th>'+T.mom+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
     '<div class="labrow" style="margin:16px 0 2px"><button class="labmbtn'+(labState.showTables?' on':'')+'" id="labtbtn">'+(en?'📋 Manual load tables — Cartridges of the World':'📋 Tablas de carga del manual — Cartridges of the World')+'</button></div>'+'<p class="gcap" style="text-align:left;margin:0 0 8px">'+(en?'Tip: to include the load tables in the printed sheet, turn on \u0022Manual load tables\u0022 before printing.':'Tip: para que la ficha impresa incluya las tablas de carga, activá \u0022Tablas de carga\u0022 antes de imprimir.')+'</p>'+
     (labState.showTables?('<p class="gcap" style="margin:2px 0 9px;text-align:left">'+(en?'Tap a row to load it into that munition.':'Tocá una fila para cargarla en esa munición.')+'</p>'+series.map(s=>loadTable(s,U,en)).join('')):'')+
@@ -3287,7 +3287,7 @@ function renderLab(){
   const zl=document.getElementById("labzero"); if(zl)zl.addEventListener("change",e=>{labState.zero=parseFloat(e.target.value); renderLab();});
   panellab.querySelectorAll(".labmbtn[data-m]").forEach(el=>el.addEventListener("click",e=>{labState.metric=e.target.dataset.m; renderLab();}));
   panellab.querySelectorAll(".labmbtn[data-sc]").forEach(el=>el.addEventListener("click",e=>{labState.scale=e.target.dataset.sc; renderLab();}));
-  panellab.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===labState.unit)return; uPref=nu; labState.unit=nu; labState.unitManual=true; labState.dist=nu==='imp'?182.88:200; labState.zero=nu==='imp'?91.44:100; renderLab();}));
+  panellab.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===labState.unit)return; const sc=panellab.scrollTop; uPref=nu; labState.unit=nu; labState.unitManual=true; labState.dist=nu==='imp'?182.88:200; labState.zero=nu==='imp'?91.44:100; renderLab(); panellab.scrollTop=sc;}));
   const tb=document.getElementById("labtbtn"); if(tb)tb.addEventListener("click",()=>{ labState.showTables=!labState.showTables; renderLab(); });
   panellab.querySelectorAll(".loadrow").forEach(el=>el.addEventListener("click",()=>{ const k=+el.dataset.k,i=+el.dataset.i; labState.slots[k].li=i; labState.slots[k].bc=null; labState.slots[k].ch=null; renderLab(); }));
 }
@@ -3414,7 +3414,7 @@ function renderCalc(){
   panelcalc.querySelectorAll(".labmbtn[data-cm]").forEach(el=>el.addEventListener("click",e=>{calcState.mode=e.target.dataset.cm; renderCalc();}));
   panelcalc.querySelectorAll(".labmbtn[data-csort]").forEach(el=>el.addEventListener("click",e=>{calcState.sort=e.target.dataset.csort; renderCalc();}));
   panelcalc.querySelectorAll(".calclink").forEach(el=>el.addEventListener("click",()=>{ const cart=el.dataset.cart; const idx=C.findIndex(c=>c.n===cart); if(idx>=0){ closeCalc(); openDetail(idx,true); } }));
-  panelcalc.querySelectorAll(".labmbtn[data-cu]").forEach(el=>el.addEventListener("click",e=>{const nu=e.target.dataset.cu; if(nu===calcState.unit)return; uPref=nu; calcState.unit=nu; calcState.unitManual=true; calcState.distM=nu==='imp'?182.88:200; calcState.zeroM=nu==='imp'?91.44:100; renderCalc();}));
+  panelcalc.querySelectorAll(".labmbtn[data-cu]").forEach(el=>el.addEventListener("click",e=>{const nu=e.target.dataset.cu; if(nu===calcState.unit)return; const sc=panelcalc.scrollTop; uPref=nu; calcState.unit=nu; calcState.unitManual=true; calcState.distM=nu==='imp'?182.88:200; calcState.zeroM=nu==='imp'?91.44:100; renderCalc(); panelcalc.scrollTop=sc;}));
   panelcalc.querySelectorAll(".gamerow").forEach(el=>el.addEventListener("click",()=>{ calcState.threshJ=+el.dataset.j; if(calcState.mode!=='energy'&&calcState.mode!=='range')calcState.mode='energy'; renderCalc(); }));
   const cd=document.getElementById("calcdist"); if(cd)cd.addEventListener("input",e=>{calcState.distM=unitset(calcState.unit).toM(+e.target.value); const v=document.getElementById("calcdistv"); if(v)v.textContent=e.target.value+' '+U.distU; renderCalc();});
   const ct=document.getElementById("calcthr"); if(ct)ct.addEventListener("change",e=>{ let val=parseFloat(e.target.value)||0; calcState.threshJ=calcState.unit==='imp'?val/0.737562:val; renderCalc(); });
