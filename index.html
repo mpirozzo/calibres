@@ -450,16 +450,19 @@ body:has(.overlay.on) .printfloat{display:inline-flex}
 @media (pointer:coarse){.ptip::after{display:none}}
 .cv-toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--brass);color:#1a1408;font-family:var(--mono);font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:200;box-shadow:0 6px 24px rgba(0,0,0,.45);opacity:0;transition:opacity .2s;pointer-events:none}
 .cv-toast.on{opacity:1}
+.hsjump{display:inline-flex;align-items:center;gap:6px;margin:-2px 0 14px;padding:7px 13px;background:var(--bg2);border:1px solid var(--brass-d);color:var(--brass);border-radius:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;cursor:pointer}
+.hsjump:hover{background:#1a1d24;color:var(--ink)}
 @media print{
   body{background:#fff!important}
-  .wrap,#ovq,#ovg,#ovlab,#ovcalc,#ovhs{display:none!important}
-  #ov.on{position:static!important;background:#fff!important;backdrop-filter:none!important}
-  #ov.on .panel{background:#fff!important;color:#1a1a1a!important;box-shadow:none!important;max-width:100%!important;width:100%!important;border:0!important;border-radius:0!important}
-  #ov.on .phead{background:#fff!important;border-color:#ddd!important}
-  #ov.on .phead h2{color:#1a1a1a!important}
-  #ov.on .rk,#ov.on .ak{color:#7a5c12!important}
-  .pshare,.pprint,.x,.errrep,.tolab,.backbtn{display:none!important}
-  #ov.on .sec{color:#7a5c12!important;border-color:#ddd!important}
+  .wrap{display:none!important}
+  #ov:not(.on),#ovlab:not(.on),#ovcalc:not(.on),#ovg:not(.on),#ovq:not(.on),#ovhs:not(.on){display:none!important}
+  #ov.on,#ovlab.on,#ovcalc.on,#ovg.on,#ovhs.on{position:static!important;background:#fff!important;backdrop-filter:none!important;display:block!important}
+  .panel{background:#fff!important;color:#1a1a1a!important;box-shadow:none!important;max-width:100%!important;width:100%!important;border:0!important;border-radius:0!important}
+  .phead{background:#fff!important;border-color:#ddd!important}
+  .phead h2{color:#1a1a1a!important}
+  .rk,.ak{color:#7a5c12!important}
+  .pshare,.pprint,.x,.errrep,.tolab,.backbtn,.hsjump{display:none!important}
+  .sec{color:#7a5c12!important;border-color:#ddd!important}
   #ov.on .bignums .bn{background:#f5f3ee!important;border-color:#ddd!important}
   #ov.on .bn .l{color:#666!important}
   #ov.on .bn .v,#ov.on .bn .v small,#ov.on .specs td,#ov.on .uses,#ov.on .notes,#ov.on .rval,#ov.on .synline{color:#222!important}
@@ -468,6 +471,18 @@ body:has(.overlay.on) .printfloat{display:inline-flex}
   #ov.on .legend span{color:#555!important}
   #ov.on .recoil .rbar{background:#eee!important}
   #ov.on .fw .fwbtn,#ov.on .fw span{color:#222!important;border-color:#ccc!important;background:#f7f5f0!important}
+  #ovlab.on .labslots{display:flex!important;gap:8px!important;margin-bottom:12px!important}
+  #ovlab.on .labslot{background:#fff!important;border:1px solid #ddd!important;border-left-width:3px!important}
+  #ovlab.on .labslot:not(:has(.labcart)){display:none!important}
+  #ovlab.on .labslot-h b{color:#1a1a1a!important}
+  #ovlab.on .labtog,#ovlab.on .labsearch,#ovlab.on .labch{display:none!important}
+  #ovlab.on .labslot input{color:#1a1a1a!important;-webkit-text-fill-color:#1a1a1a!important;opacity:1!important;background:#fff!important;border:0!important}
+  #ovlab.on .labcart,#ovlab.on .labload{display:block!important;-webkit-appearance:none;appearance:none;background:#fff!important;color:#1a1a1a!important;-webkit-text-fill-color:#1a1a1a!important;border:0!important;padding:2px 0!important;font-weight:600;opacity:1!important}
+  #ovlab.on input[type=range]{display:none!important}
+  #ovlab.on .gdiagram,#ovcalc.on .gdiagram{background:#fff!important;border:1px solid #ddd!important}
+  #ovlab.on .gdiagram svg text,#ovcalc.on .gdiagram svg text{fill:#333!important}
+  #ovcalc.on .calcgame,#ovcalc.on .gametbl td,#ovcalc.on .calctbl td{background:#fff!important;color:#222!important;border-color:#e6e6e6!important}
+  .lablab,.labval{color:#555!important}
 }
 </style>
 </head>
@@ -2865,7 +2880,7 @@ const GUIDE={
      <li><b>Centro — Fulminante.</b> Un fogón = Boxer (recargable); dos o más = Berdan. <code>NR</code> = no recargable (vaina de aluminio); <code>NT</code> = no tóxico.</li>
      <li><b>Anillo de color del fulminante.</b> El sellante coloreado (rojo, púrpura, azul…) marca lotes especiales y es una pista de origen.</li>
    </ul>
-   <div class="sec">Códigos de fabricantes (civiles)</div>
+   <div class="sec">Códigos de fabricantes (civiles)</div><button class="hsjump" onclick="openHS()">🔎 Buscar un culote en la base</button>
    <table class="hstbl"><tbody>
      <tr><td>WIN · W-W</td><td>Winchester</td><td>EE.UU.</td></tr>
      <tr><td>WRA</td><td>Winchester Repeating Arms</td><td>EE.UU.</td></tr>
@@ -2894,7 +2909,7 @@ const GUIDE={
      <tr><td>TULA · BARNAUL</td><td>Tula / Barnaul</td><td>Rusia</td></tr>
      <tr><td>NORINCO · 31 · 71</td><td>Norinco (códigos numéricos)</td><td>China</td></tr>
    </tbody></table>
-   <div class="sec">Plantas y códigos militares</div>
+   <div class="sec">Plantas y códigos militares</div><button class="hsjump" onclick="openHS()">🔎 Buscar un culote en la base</button>
    <table class="hstbl"><tbody>
      <tr><td>LC</td><td>Lake City AAP (activa)</td><td>EE.UU.</td></tr>
      <tr><td>FC</td><td>Federal Cartridge</td><td>EE.UU.</td></tr>
@@ -2971,7 +2986,7 @@ const GUIDE={
      <li><b>Center — Primer.</b> One flash hole = Boxer (reloadable); two or more = Berdan. <code>NR</code> = non-reloadable (aluminum case); <code>NT</code> = non-toxic.</li>
      <li><b>Primer-annulus color.</b> The colored sealant (red, purple, blue…) marks special lots and is a clue to origin.</li>
    </ul>
-   <div class="sec">Maker codes (commercial)</div>
+   <div class="sec">Maker codes (commercial)</div><button class="hsjump" onclick="openHS()">🔎 Look up a headstamp</button>
    <table class="hstbl"><tbody>
      <tr><td>WIN · W-W</td><td>Winchester</td><td>USA</td></tr>
      <tr><td>WRA</td><td>Winchester Repeating Arms</td><td>USA</td></tr>
@@ -3000,7 +3015,7 @@ const GUIDE={
      <tr><td>TULA · BARNAUL</td><td>Tula / Barnaul</td><td>Russia</td></tr>
      <tr><td>NORINCO · 31 · 71</td><td>Norinco (numeric codes)</td><td>China</td></tr>
    </tbody></table>
-   <div class="sec">Military plants and codes</div>
+   <div class="sec">Military plants and codes</div><button class="hsjump" onclick="openHS()">🔎 Look up a headstamp</button>
    <table class="hstbl"><tbody>
      <tr><td>LC</td><td>Lake City AAP (active)</td><td>USA</td></tr>
      <tr><td>FC</td><td>Federal Cartridge</td><td>USA</td></tr>
@@ -3552,9 +3567,9 @@ try{setLang(lang);}catch(err){console.error(err);}
 function cSlug(name){return (''+name).toLowerCase().replace(/×/g,'x').replace(/\+/g,'-plus-').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
 function shareUrlFor(i){return location.origin+location.pathname+'?c='+encodeURIComponent(cSlug(C[i].n));}
 function cvToast(msg){var t=document.createElement('div');t.className='cv-toast';t.textContent=msg;document.body.appendChild(t);requestAnimationFrame(function(){t.classList.add('on');});setTimeout(function(){t.classList.remove('on');setTimeout(function(){t.remove();},250);},1600);}
-function shareFicha(i){var c=C[i],url=shareUrlFor(i),en=lang==='en';var text=c.n+(en?' — ammunition reference':' — referencia de munición');if(navigator.share){navigator.share({title:c.n,text:text,url:url}).catch(function(){});}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){cvToast(en?'Link copied':'Link copiado');},function(){window.prompt(en?'Copy this link:':'Copiá este link:',url);});}else{window.prompt(en?'Copy this link:':'Copiá este link:',url);}}
+function shareFicha(i){shareLink(shareUrlFor(i),C[i].n);}
 /* deep-link ?c=slug -> abrir ficha */
-function shareLink(url,title){var en=lang==='en';if(navigator.share){navigator.share({title:title,url:url}).catch(function(){});}else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){cvToast(en?'Link copied':'Link copiado');},function(){window.prompt(en?'Copy this link:':'Copiá este link:',url);});}else{window.prompt(en?'Copy this link:':'Copiá este link:',url);}}
+function shareLink(url,title){var en=lang==='en';var nat=navigator.share&&((window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)||/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent));if(nat){navigator.share({title:title,url:url}).catch(function(){});return;}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){cvToast(en?'Link copied \u2713':'Enlace copiado \u2713');},function(){window.prompt(en?'Copy this link:':'Copiá este link:',url);});return;}window.prompt(en?'Copy this link:':'Copiá este link:',url);}
 function shareLab(){if(!labState)return;var on=labState.slots.filter(function(s){return s.on;});var parts=on.map(function(s){return cSlug(s.cart)+(s.li?(':'+s.li):'');});var url=location.origin+location.pathname+'?lab='+encodeURIComponent(parts.join(','))+'&d='+Math.round(labState.dist)+'&u='+(labState.unit==='imp'?'imp':'m');shareLink(url,lang==='en'?'Ballistic lab':'Laboratorio balístico');}
 function shareCalc(){if(!calcState)return;var url=location.origin+location.pathname+'?calc='+encodeURIComponent(calcState.mode)+'&j='+Math.round(calcState.threshJ)+'&d='+Math.round(calcState.distM)+'&u='+(calcState.unit==='imp'?'imp':'m');shareLink(url,lang==='en'?'Hunting calculator':'Calculadora de caza');}
 (function(){try{var p=new URLSearchParams(location.search);
