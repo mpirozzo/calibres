@@ -102,7 +102,7 @@
 .printcredit{display:none}
 .printfloat{display:none;position:fixed;bottom:18px;right:18px;z-index:80;width:44px;height:44px;align-items:center;justify-content:center;border-radius:13px;border:1px solid var(--line2);background:var(--panel2);color:var(--brass);cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .printfloat:hover{border-color:var(--brass-d)}
-body:has(.overlay.on) .printfloat{display:inline-flex}
+body:has(.overlay.on) .printfloat{display:none}
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   @page{margin:13mm}
@@ -238,6 +238,9 @@ body:has(.overlay.on) .printfloat{display:inline-flex}
   .calcgame{flex:1 1 240px;background:var(--bg2);border:1px solid var(--line2);border-radius:11px;padding:8px 11px}
   .gametbl td{cursor:pointer;font-size:12.5px;padding:5px 6px}
   .gametbl td:last-child{text-align:right;font-family:var(--mono);color:var(--ink2);white-space:nowrap}
+  .cmptable.gametbl{min-width:0}
+  .gametbl td:first-child{white-space:normal;line-height:1.25}
+  @media (max-width:430px){.labslots{grid-template-columns:1fr}}
   .gamerow:hover td{background:rgba(201,162,76,.09)}
   .gamerow.sel td{background:rgba(201,162,76,.18);color:var(--ink)}
   .calctbl td:first-child,.calctbl th:first-child{color:var(--ink3);width:26px;text-align:right}
@@ -2279,7 +2282,7 @@ function openCompare(){
   panel.innerHTML=`
     <div class="phead">
       <div class="t"><div class="rk">${tr.cmpRk[lang](cs.length)}</div><h2>${tr.cmpTitle[lang]}</h2></div>
-      <button class="pprint" onclick="window.print()" title="Imprimir ficha / Print" aria-label="Imprimir ficha / Print"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="x" id="xbtn" aria-label="${tr.close[lang]}">×</button>
+      <button class="pprint" onclick="window.print()" title="Imprimir ficha / Print" aria-label="Imprimir ficha / Print"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="pshare ptip" data-tip="${lang==='en'?'Share':'Compartir'}" onclick="shareCompare()" aria-label="${lang==='en'?'Share':'Compartir'}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/></svg></button><button class="x" id="xbtn" aria-label="${tr.close[lang]}">×</button>
     </div>
     <div class="pbody">
       <div class="cmpleghdr">${legend}</div>
@@ -3170,7 +3173,7 @@ const GUIDE={
 };
 function openGuide(key){
   const g=GUIDE[key]; if(!g) return; curGuide=key;
-  panelg.innerHTML=`<div class="phead"><div class="t"><div class="rk">${pick(g.rk)}</div><h2>${pick(g.h2)}</h2></div><button class="pprint" onclick="window.print()" title="Imprimir ficha / Print" aria-label="Imprimir ficha / Print"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="x" id="xbtng" aria-label="${tr.close[lang]}">×</button></div><div class="pbody">${pick(g.body)}<div class="guidecite">${pick(g.cite)}</div></div>`;
+  panelg.innerHTML=`<div class="phead"><div class="t"><div class="rk">${pick(g.rk)}</div><h2>${pick(g.h2)}</h2></div><button class="pprint" onclick="window.print()" title="Imprimir ficha / Print" aria-label="Imprimir ficha / Print"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg></button><button class="pshare ptip" data-tip="${lang==='en'?'Share':'Compartir'}" onclick="shareGuide()" aria-label="${lang==='en'?'Share':'Compartir'}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/></svg></button><button class="x" id="xbtng" aria-label="${tr.close[lang]}">×</button></div><div class="pbody">${pick(g.body)}<div class="guidecite">${pick(g.cite)}</div></div>`;
   document.getElementById("xbtng").addEventListener("click",closeGuide);
   ovg.classList.add("on"); document.body.style.overflow="hidden"; panelg.scrollTop=0;
 }
@@ -3540,7 +3543,7 @@ function hsResults(q){
 }
 function openHS(){
   var en=lang==='en';
-  panelhs.innerHTML='<div class="phead"><div class="t"><div class="rk">'+(en?'Reference · Headstamps':'Referencia · Culotes')+'</div><h2>'+(en?'Headstamp lookup':'Buscador de culotes')+'</h2></div><button class="x" id="xhs" aria-label="'+tr.close[lang]+'">×</button></div><div class="pbody"><p class="hsintro">'+(en?'Type the maker code stamped on the case head — the letters or numbers around the rim — and find out which factory it is. It covers the most common military and commercial codes worldwide; for anything not listed, the full IAA database is linked below.':'Escribí el código de fábrica que ves en la base de la vaina —las letras o números del borde— y averiguá de qué fábrica es. Cubre los códigos militares y comerciales más comunes del mundo; para lo que no esté, abajo está el link a la base completa de la IAA.')+'</p><div class="hssearch"><input id="hsq" type="search" placeholder="'+(en?'e.g. LC, DWM, 539, FLB':'ej. LC, DWM, 539, FLB')+'" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div id="hsres"></div></div>';
+  panelhs.innerHTML='<div class="phead"><div class="t"><div class="rk">'+(en?'Reference · Headstamps':'Referencia · Culotes')+'</div><h2>'+(en?'Headstamp lookup':'Buscador de culotes')+'</h2></div>'+(en?'<button class="pshare ptip" data-tip="Share" onclick="shareHS()" aria-label="Share"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/></svg></button>':'<button class="pshare ptip" data-tip="Compartir" onclick="shareHS()" aria-label="Compartir"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/></svg></button>')+'<button class="x" id="xhs" aria-label="'+tr.close[lang]+'">×</button></div><div class="pbody"><p class="hsintro">'+(en?'Type the maker code stamped on the case head — the letters or numbers around the rim — and find out which factory it is. It covers the most common military and commercial codes worldwide; for anything not listed, the full IAA database is linked below.':'Escribí el código de fábrica que ves en la base de la vaina —las letras o números del borde— y averiguá de qué fábrica es. Cubre los códigos militares y comerciales más comunes del mundo; para lo que no esté, abajo está el link a la base completa de la IAA.')+'</p><div class="hssearch"><input id="hsq" type="search" placeholder="'+(en?'e.g. LC, DWM, 539, FLB':'ej. LC, DWM, 539, FLB')+'" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div id="hsres"></div></div>';
   document.getElementById('xhs').addEventListener('click',closeHS);
   var inp=document.getElementById('hsq'); inp.addEventListener('input',function(e){ hsResults(e.target.value); });
   hsResults('');
@@ -3587,6 +3590,9 @@ function shareFicha(i){shareLink(shareUrlFor(i),C[i].n);}
 function shareLink(url,title){var en=lang==='en';var nat=navigator.share&&((window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)||/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent));if(nat){navigator.share({title:title,url:url}).catch(function(){});return;}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){cvToast(en?'Link copied \u2713':'Enlace copiado \u2713');},function(){window.prompt(en?'Copy this link:':'Copiá este link:',url);});return;}window.prompt(en?'Copy this link:':'Copiá este link:',url);}
 function shareLab(){if(!labState)return;var on=labState.slots.filter(function(s){return s.on;});var parts=on.map(function(s){return cSlug(s.cart)+(s.li?(':'+s.li):'');});var url=location.origin+location.pathname+'?lab='+encodeURIComponent(parts.join(','))+'&d='+Math.round(labState.dist)+'&u='+(labState.unit==='imp'?'imp':'m');shareLink(url,lang==='en'?'Ballistic lab':'Laboratorio balístico');}
 function shareCalc(){if(!calcState)return;var url=location.origin+location.pathname+'?calc='+encodeURIComponent(calcState.mode)+'&j='+Math.round(calcState.threshJ)+'&d='+Math.round(calcState.distM)+'&u='+(calcState.unit==='imp'?'imp':'m');shareLink(url,lang==='en'?'Hunting calculator':'Calculadora de caza');}
+function shareGuide(){if(typeof curGuide==='undefined'||!curGuide)return;var url=location.origin+location.pathname+'?g='+curGuide;shareLink(url,(typeof GUIDE!=='undefined'&&GUIDE[curGuide])?pick(GUIDE[curGuide].h2):'Calibres');}
+function shareHS(){var hi=document.getElementById('hsq');var q=hi&&hi.value?hi.value.trim():'';var url=location.origin+location.pathname+'?hs='+(q?encodeURIComponent(q):'1');shareLink(url,lang==='en'?'Headstamp lookup':'Buscador de culotes');}
+function shareCompare(){if(!compareSet||!compareSet.length)return;var url=location.origin+location.pathname+'?cmp='+compareSet.map(function(i){return cSlug(C[i].n);}).join(',');shareLink(url,lang==='en'?'Comparison':'Comparación');}
 (function(){try{var p=new URLSearchParams(location.search);
   var cv=p.get('c');
   if(cv){var qk=cSlug(decodeURIComponent(cv));var idx=-1;for(var j=0;j<C.length;j++){if(cSlug(C[j].n)===qk){idx=j;break;}}if(idx<0&&/^[0-9]+$/.test(cv))idx=(+cv)-1;if(idx>=0)openDetail(idx);return;}
@@ -3594,6 +3600,9 @@ function shareCalc(){if(!calcState)return;var url=location.origin+location.pathn
   if(pl){if(!labState)initLab();var items=decodeURIComponent(pl).split(',').filter(Boolean);var slots=[];items.slice(0,3).forEach(function(it){var seg=it.split(':');var slug=seg[0];var li=parseInt(seg[1]||'0',10)||0;var cart=LABCART.find(function(n){return cSlug(n)===slug;});if(cart){var s=defSlot(cart);s.li=Math.min(li,LOADS[cart].loads.length-1);s.bc=null;s.on=true;slots.push(s);}});if(slots.length){while(slots.length<3)slots.push({cart:slots[0].cart,li:0,bc:null,ch:null,on:false});labState.slots=slots;}var d=parseFloat(p.get('d'));if(d)labState.dist=d;var u=p.get('u');if(u==='imp'||u==='m'){labState.unit=u;labState.unitManual=true;uPref=u;}openLab();return;}
   var pc=p.get('calc');
   if(pc){if(!calcState)initCalc();calcState.mode=pc;var jj=parseFloat(p.get('j'));if(jj)calcState.threshJ=jj;var d2=parseFloat(p.get('d'));if(d2)calcState.distM=d2;var u2=p.get('u');if(u2==='imp'||u2==='m'){calcState.unit=u2;calcState.unitManual=true;uPref=u2;}openCalc();return;}
+  var pg=p.get('g');if(pg&&typeof GUIDE!=='undefined'&&GUIDE[pg]){openGuide(pg);return;}
+  var ph=p.get('hs');if(ph){openHS();if(ph!=='1'){var hi=document.getElementById('hsq');if(hi){hi.value=decodeURIComponent(ph);hsResults(hi.value);}}return;}
+  var pm=p.get('cmp');if(pm){var sl=decodeURIComponent(pm).split(',').filter(Boolean);var ids=[];sl.forEach(function(s){for(var j=0;j<C.length;j++){if(cSlug(C[j].n)===s){ids.push(j);break;}}});if(ids.length>=2){compareSet.length=0;ids.slice(0,4).forEach(function(i){compareSet.push(i);});openCompare();}return;}
 }catch(e){}})();
 
 /* autochequeo de coherencia (silencioso; se activa con ?debug en la URL) */
