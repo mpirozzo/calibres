@@ -2015,7 +2015,7 @@ renderChips();
 chipsEl.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;
   activeTag=b.dataset.k;[...chipsEl.children].forEach(c=>c.setAttribute("aria-pressed",c===b));render();});
 function norm(s){return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/(\d)\s*[x×]\s*(\d)/g,"$1$2").replace(/[^a-z0-9]/g,"");}
-qEl.addEventListener("input",()=>{query=norm(qEl.value);render();});
+let qDeb=null; qEl.addEventListener("input",()=>{clearTimeout(qDeb); qDeb=setTimeout(()=>{query=norm(qEl.value);render();},90);});
 
 function tagHTML(t){return `<span class="tag" style="color:var(--${t});background:color-mix(in srgb,var(--${t}) 16%,transparent)">${pick(T[t])}</span>`;}
 
@@ -3396,24 +3396,25 @@ function renderLab(){
   document.getElementById("xbtnlab").addEventListener("click",closeLab);
   panellab.querySelectorAll(".labcart").forEach(el=>{ el.value=labState.slots[+el.dataset.k].cart; });
   panellab.querySelectorAll(".labsearch").forEach(el=>el.addEventListener("input",e=>{ const k=+e.target.dataset.k; labState.slots[k].q=e.target.value; const sel=panellab.querySelector('.labcart[data-k="'+k+'"]'); if(sel){ sel.innerHTML=slotOpts(labState.slots[k].q); sel.value=labState.slots[k].cart; } }));
-  panellab.querySelectorAll(".labcart").forEach(el=>el.addEventListener("change",e=>{const k=+e.target.dataset.k; labState.slots[k].cart=e.target.value; labState.slots[k].li=0; labState.slots[k].bc=null; labState.slots[k].bc7=null; labState.slots[k].model=null; labState.slots[k].ch=null; renderLab();}));
-  panellab.querySelectorAll(".labload").forEach(el=>el.addEventListener("change",e=>{const k=+e.target.dataset.k; labState.slots[k].li=+e.target.value; labState.slots[k].bc=null; labState.slots[k].bc7=null; labState.slots[k].model=null; labState.slots[k].ch=null; renderLab();}));
-  panellab.querySelectorAll(".labbc").forEach(el=>el.addEventListener("change",e=>{const k=+e.target.dataset.k; const v=parseFloat(e.target.value); if(v>0){const sd=slotData(labState.slots[k]); if(sd.model==='g7')labState.slots[k].bc7=v; else labState.slots[k].bc=v;} renderLab();}));
-  panellab.querySelectorAll(".labmodel").forEach(el=>el.addEventListener("click",e=>{const k=+e.target.dataset.k; labState.slots[k].model=e.target.dataset.mdl; renderLab();}));
-  panellab.querySelectorAll(".labch").forEach(el=>el.addEventListener("input",e=>{const k=+e.target.dataset.k; labState.slots[k].ch=parseFloat(e.target.value); renderLab();}));
-  panellab.querySelectorAll(".labtog").forEach(el=>el.addEventListener("click",e=>{const k=+e.target.dataset.k; labState.slots[k].on=!labState.slots[k].on; if(labState.slots[k].on&&labState.slots[k].bc==null){labState.slots[k].bc=defSlot(labState.slots[k].cart).bc;} renderLab();}));
-  const dl=document.getElementById("labdist"); if(dl)dl.addEventListener("input",e=>{ labState.dist=U.toM(+e.target.value); const dv=document.getElementById("labdistv"); if(dv)dv.textContent=e.target.value+' '+U.distU; renderLab();});
-  const zl=document.getElementById("labzero"); if(zl)zl.addEventListener("change",e=>{labState.zero=parseFloat(e.target.value); renderLab();});
+  panellab.querySelectorAll(".labcart").forEach(el=>el.addEventListener("change",e=>{const k=+e.target.dataset.k; labState.slots[k].cart=e.target.value; labState.slots[k].li=0; labState.slots[k].bc=null; labState.slots[k].bc7=null; labState.slots[k].model=null; labState.slots[k].ch=null; rrLab();}));
+  panellab.querySelectorAll(".labload").forEach(el=>el.addEventListener("change",e=>{const k=+e.target.dataset.k; labState.slots[k].li=+e.target.value; labState.slots[k].bc=null; labState.slots[k].bc7=null; labState.slots[k].model=null; labState.slots[k].ch=null; rrLab();}));
+  panellab.querySelectorAll(".labbc").forEach(el=>el.addEventListener("change",e=>{const k=+e.target.dataset.k; const v=parseFloat(e.target.value); if(v>0){const sd=slotData(labState.slots[k]); if(sd.model==='g7')labState.slots[k].bc7=v; else labState.slots[k].bc=v;} rrLab();}));
+  panellab.querySelectorAll(".labmodel").forEach(el=>el.addEventListener("click",e=>{const k=+e.target.dataset.k; labState.slots[k].model=e.target.dataset.mdl; rrLab();}));
+  panellab.querySelectorAll(".labch").forEach(el=>{el.addEventListener("input",e=>{const lv=e.target.nextElementSibling; if(lv)lv.textContent=fmtN(parseFloat(e.target.value))+' gr';}); el.addEventListener("change",e=>{const k=+e.target.dataset.k; labState.slots[k].ch=parseFloat(e.target.value); rrLab();});});
+  panellab.querySelectorAll(".labtog").forEach(el=>el.addEventListener("click",e=>{const k=+e.target.dataset.k; labState.slots[k].on=!labState.slots[k].on; if(labState.slots[k].on&&labState.slots[k].bc==null){labState.slots[k].bc=defSlot(labState.slots[k].cart).bc;} rrLab();}));
+  const dl=document.getElementById("labdist"); if(dl){dl.addEventListener("input",e=>{ const dv=document.getElementById("labdistv"); if(dv)dv.textContent=e.target.value+' '+U.distU; }); dl.addEventListener("change",e=>{ labState.dist=U.toM(+e.target.value); rrLab();});}
+  const zl=document.getElementById("labzero"); if(zl)zl.addEventListener("change",e=>{labState.zero=parseFloat(e.target.value); rrLab();});
   panellab.querySelectorAll(".labmbtn[data-m]").forEach(el=>el.addEventListener("click",e=>{labState.metric=e.target.dataset.m; renderLab();}));
   panellab.querySelectorAll(".labmbtn[data-sc]").forEach(el=>el.addEventListener("click",e=>{labState.scale=e.target.dataset.sc; renderLab();}));
   panellab.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===labState.unit)return; const sc=panellab.scrollTop; uPref=nu; labState.unit=nu; labState.unitManual=true; labState.dist=nu==='imp'?182.88:200; labState.zero=nu==='imp'?91.44:100; renderLab(); panellab.scrollTop=sc;}));
-  const tb=document.getElementById("labtbtn"); if(tb)tb.addEventListener("click",()=>{ labState.showTables=!labState.showTables; renderLab(); });
-  const db=document.getElementById("labdbtn"); if(db)db.addEventListener("click",()=>{ labState.showDope=!labState.showDope; renderLab(); });
-  const wd=document.getElementById("labwind"); if(wd)wd.addEventListener("change",e=>{ const v=parseFloat(e.target.value); if(!isNaN(v)&&v>=0){ labState.wind = labState.unit==='imp'? v*0.44704 : v/3.6; } renderLab(); });
-  const al=document.getElementById("labalt"); if(al)al.addEventListener("change",e=>{ const v=parseFloat(e.target.value); if(!isNaN(v)){ labState.alt = labState.unit==='imp'? v/3.28084 : v; } renderLab(); });
-  const tp=document.getElementById("labtemp"); if(tp)tp.addEventListener("change",e=>{ const v=parseFloat(e.target.value); if(!isNaN(v)){ labState.temp = labState.unit==='imp'? (v-32)*5/9 : v; } renderLab(); });
-  panellab.querySelectorAll(".loadrow").forEach(el=>el.addEventListener("click",()=>{ const k=+el.dataset.k,i=+el.dataset.i; labState.slots[k].li=i; labState.slots[k].bc=null; labState.slots[k].bc7=null; labState.slots[k].model=null; labState.slots[k].ch=null; renderLab(); }));
+  const tb=document.getElementById("labtbtn"); if(tb)tb.addEventListener("click",()=>{ labState.showTables=!labState.showTables; rrLab(); });
+  const db=document.getElementById("labdbtn"); if(db)db.addEventListener("click",()=>{ labState.showDope=!labState.showDope; rrLab(); });
+  const wd=document.getElementById("labwind"); if(wd)wd.addEventListener("change",e=>{ const v=parseFloat(e.target.value); if(!isNaN(v)&&v>=0){ labState.wind = labState.unit==='imp'? v*0.44704 : v/3.6; } rrLab(); });
+  const al=document.getElementById("labalt"); if(al)al.addEventListener("change",e=>{ const v=parseFloat(e.target.value); if(!isNaN(v)){ labState.alt = labState.unit==='imp'? v/3.28084 : v; } rrLab(); });
+  const tp=document.getElementById("labtemp"); if(tp)tp.addEventListener("change",e=>{ const v=parseFloat(e.target.value); if(!isNaN(v)){ labState.temp = labState.unit==='imp'? (v-32)*5/9 : v; } rrLab(); });
+  panellab.querySelectorAll(".loadrow").forEach(el=>el.addEventListener("click",()=>{ const k=+el.dataset.k,i=+el.dataset.i; labState.slots[k].li=i; labState.slots[k].bc=null; labState.slots[k].bc7=null; labState.slots[k].model=null; labState.slots[k].ch=null; rrLab(); }));
 }
+function rrLab(){ const sc=panellab.scrollTop; renderLab(); panellab.scrollTop=sc; }
 function openLab(){ if(!labState)initLab(); renderLab(); ovlab.classList.add("on"); document.body.style.overflow="hidden"; panellab.scrollTop=0; }
 function closeLab(){ ovlab.classList.remove("on"); document.body.style.overflow=""; }
 ovlab.addEventListener("click",e=>{ if(e.target===ovlab) closeLab(); });
@@ -3535,14 +3536,15 @@ function renderCalc(){
     '</div>';
   document.getElementById("xbtncalc").addEventListener("click",closeCalc);
   panelcalc.querySelectorAll(".labmbtn[data-cm]").forEach(el=>el.addEventListener("click",e=>{calcState.mode=e.target.dataset.cm; renderCalc();}));
-  panelcalc.querySelectorAll(".labmbtn[data-csort]").forEach(el=>el.addEventListener("click",e=>{calcState.sort=e.target.dataset.csort; renderCalc();}));
+  panelcalc.querySelectorAll(".labmbtn[data-csort]").forEach(el=>el.addEventListener("click",e=>{calcState.sort=e.target.dataset.csort; rrCalc();}));
   panelcalc.querySelectorAll(".calclink").forEach(el=>el.addEventListener("click",()=>{ const cart=el.dataset.cart; const idx=C.findIndex(c=>c.n===cart); if(idx>=0){ closeCalc(); openDetail(idx,true); } }));
   panelcalc.querySelectorAll(".labmbtn[data-cu]").forEach(el=>el.addEventListener("click",e=>{const nu=e.target.dataset.cu; if(nu===calcState.unit)return; const sc=panelcalc.scrollTop; uPref=nu; calcState.unit=nu; calcState.unitManual=true; calcState.distM=nu==='imp'?182.88:200; calcState.zeroM=nu==='imp'?91.44:100; renderCalc(); panelcalc.scrollTop=sc;}));
-  panelcalc.querySelectorAll(".gamerow").forEach(el=>el.addEventListener("click",()=>{ calcState.threshJ=+el.dataset.j; if(calcState.mode!=='energy'&&calcState.mode!=='range')calcState.mode='energy'; renderCalc(); }));
-  const cd=document.getElementById("calcdist"); if(cd)cd.addEventListener("input",e=>{calcState.distM=unitset(calcState.unit).toM(+e.target.value); const v=document.getElementById("calcdistv"); if(v)v.textContent=e.target.value+' '+U.distU; renderCalc();});
-  const ct=document.getElementById("calcthr"); if(ct)ct.addEventListener("change",e=>{ let val=parseFloat(e.target.value)||0; calcState.threshJ=calcState.unit==='imp'?val/0.737562:val; renderCalc(); });
-  const cz=document.getElementById("calczero"); if(cz)cz.addEventListener("change",e=>{calcState.zeroM=parseFloat(e.target.value); renderCalc();});
+  panelcalc.querySelectorAll(".gamerow").forEach(el=>el.addEventListener("click",()=>{ calcState.threshJ=+el.dataset.j; if(calcState.mode!=='energy'&&calcState.mode!=='range')calcState.mode='energy'; rrCalc(); }));
+  const cd=document.getElementById("calcdist"); if(cd){cd.addEventListener("input",e=>{const v=document.getElementById("calcdistv"); if(v)v.textContent=e.target.value+' '+U.distU;}); cd.addEventListener("change",e=>{calcState.distM=unitset(calcState.unit).toM(+e.target.value); rrCalc();});}
+  const ct=document.getElementById("calcthr"); if(ct)ct.addEventListener("change",e=>{ let val=parseFloat(e.target.value)||0; calcState.threshJ=calcState.unit==='imp'?val/0.737562:val; rrCalc(); });
+  const cz=document.getElementById("calczero"); if(cz)cz.addEventListener("change",e=>{calcState.zeroM=parseFloat(e.target.value); rrCalc();});
 }
+function rrCalc(){ const sc=panelcalc.scrollTop; renderCalc(); panelcalc.scrollTop=sc; }
 function openCalc(){ if(!calcState)initCalc(); renderCalc(); ovcalc.classList.add("on"); document.body.style.overflow="hidden"; panelcalc.scrollTop=0; }
 function closeCalc(){ ovcalc.classList.remove("on"); document.body.style.overflow=""; }
 ovcalc.addEventListener("click",e=>{ if(e.target===ovcalc) closeCalc(); });
@@ -3633,7 +3635,7 @@ function shareCompare(){if(!compareSet||!compareSet.length)return;var url=locati
   var pl=p.get('lab');
   if(pl){if(!labState)initLab();var items=decodeURIComponent(pl).split(',').filter(Boolean);var slots=[];items.slice(0,3).forEach(function(it){var seg=it.split(':');var slug=seg[0];var li=parseInt(seg[1]||'0',10)||0;var cart=LABCART.find(function(n){return cSlug(n)===slug;});if(cart){var s=defSlot(cart);s.li=Math.min(li,LOADS[cart].loads.length-1);s.bc=null;s.on=true;slots.push(s);}});if(slots.length){while(slots.length<3)slots.push({cart:slots[0].cart,li:0,bc:null,ch:null,on:false});labState.slots=slots;}var d=parseFloat(p.get('d'));if(d)labState.dist=d;var u=p.get('u');if(u==='imp'||u==='m'){labState.unit=u;labState.unitManual=true;uPref=u;}openLab();return;}
   var pc=p.get('calc');
-  if(pc){if(!calcState)initCalc();calcState.mode=pc;var jj=parseFloat(p.get('j'));if(jj)calcState.threshJ=jj;var d2=parseFloat(p.get('d'));if(d2)calcState.distM=d2;var u2=p.get('u');if(u2==='imp'||u2==='m'){calcState.unit=u2;calcState.unitManual=true;uPref=u2;}openCalc();return;}
+  if(pc){if(!calcState)initCalc();if(['energy','range','flat','super'].indexOf(pc)>=0)calcState.mode=pc;var jj=parseFloat(p.get('j'));if(jj)calcState.threshJ=jj;var d2=parseFloat(p.get('d'));if(d2)calcState.distM=d2;var u2=p.get('u');if(u2==='imp'||u2==='m'){calcState.unit=u2;calcState.unitManual=true;uPref=u2;}openCalc();return;}
   var pg=p.get('g');if(pg&&typeof GUIDE!=='undefined'&&GUIDE[pg]){openGuide(pg);return;}
   var ph=p.get('hs');if(ph){openHS();if(ph!=='1'){var hi=document.getElementById('hsq');if(hi){hi.value=decodeURIComponent(ph);hsResults(hi.value);}}return;}
   var pm=p.get('cmp');if(pm){var sl=decodeURIComponent(pm).split(',').filter(Boolean);var ids=[];sl.forEach(function(s){for(var j=0;j<C.length;j++){if(cSlug(C[j].n)===s){ids.push(j);break;}}});if(ids.length>=2){compareSet.length=0;ids.slice(0,4).forEach(function(i){compareSet.push(i);});openCompare();}return;}
