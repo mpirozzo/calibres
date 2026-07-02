@@ -305,8 +305,8 @@ body:has(.overlay.on) .printfloat{display:none}
   .cmpbar .cv{font-family:var(--mono);color:var(--ink);white-space:nowrap;font-size:11.5px}
 
   /* ---------- list ---------- */
-  .grid{display:grid;grid-template-columns:1fr;gap:11px;margin-top:6px}
-  @media(min-width:580px){.grid{grid-template-columns:1fr 1fr}}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:11px;margin-top:6px}
+  @media(min-width:580px){.grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
   .card{display:flex;gap:12px;align-items:center;text-align:left;width:100%;
     background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);
     border-radius:14px;padding:12px;cursor:pointer;color:inherit;font-family:inherit;
@@ -3647,6 +3647,11 @@ function shareCompare(){if(!compareSet||!compareSet.length)return;var url=locati
   var ph=p.get('hs');if(ph){openHS();if(ph!=='1'){var hi=document.getElementById('hsq');if(hi){hi.value=decodeURIComponent(ph);hsResults(hi.value);}}return;}
   var pm=p.get('cmp');if(pm){var sl=decodeURIComponent(pm).split(',').filter(Boolean);var ids=[];sl.forEach(function(s){for(var j=0;j<C.length;j++){if(cSlug(C[j].n)===s){ids.push(j);break;}}});if(ids.length>=2){compareSet.length=0;ids.slice(0,4).forEach(function(i){compareSet.push(i);});openCompare();}return;}
 }catch(e){}})();
+/* warmup: precalcula las trayectorias de la calculadora en ratos libres para que abrirla sea instantáneo */
+(function(){ if(typeof CALCREPS==='undefined')return; var i=0;
+  function step(){ var t0=performance.now(); while(i<CALCREPS.length && performance.now()-t0<12){ try{ensureRaw(CALCREPS[i]);}catch(e){} i++; }
+    if(i<CALCREPS.length) setTimeout(step,80); }
+  setTimeout(step,1500); })();
 
 /* autochequeo de coherencia (silencioso; se activa con ?debug en la URL) */
 if(location.search.indexOf("debug")>=0){(function(){var K=0.00006479891,bad=[];
