@@ -465,6 +465,10 @@ body:has(.overlay.on) .printfloat{display:none}
 @media (pointer:coarse){.ptip::after{display:none}}
 .cv-toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--brass);color:#1a1408;font-family:var(--mono);font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:200;box-shadow:0 6px 24px rgba(0,0,0,.45);opacity:0;transition:opacity .2s;pointer-events:none}
 .cv-toast.on{opacity:1}
+.upd-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--brass);color:var(--ink);font-family:var(--mono);font-size:13px;padding:10px 12px 10px 16px;border-radius:12px;z-index:300;box-shadow:0 8px 28px rgba(0,0,0,.5);opacity:0;transition:opacity .25s,transform .25s;max-width:92vw}
+.upd-toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.upd-toast .upd-go{background:var(--brass);color:#1a1408;border:0;font-family:var(--mono);font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.upd-toast .upd-x{background:none;border:0;color:var(--ink3);font-size:17px;cursor:pointer;padding:2px 4px;line-height:1}
 .hsjump{display:inline-flex;align-items:center;gap:6px;margin:-2px 0 14px;padding:7px 13px;background:var(--bg2);border:1px solid var(--brass-d);color:var(--brass);border-radius:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;cursor:pointer}
 .hsjump:hover{background:#1a1d24;color:var(--ink)}
 .brandlogo{display:block;margin:0 auto 10px;width:84px;height:84px}
@@ -1913,7 +1917,9 @@ const grid=document.getElementById("grid"), countEl=document.getElementById("cou
 let activeTag="comunes", query="", compareMode=false, compareSet=[];
 
 /* ===================== IDIOMA / LANGUAGE ===================== */
-let lang = (navigator.language||"").toLowerCase().startsWith("en") ? "en" : "es";
+function prefGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function prefSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+let lang = (function(){ const s=prefGet("cal-lang"); if(s==="en"||s==="es")return s; return (navigator.language||"").toLowerCase().startsWith("en") ? "en" : "es"; })();
 let curDetail=null, curWeapon=null, curCompare=false, curFromCalc=false;
 function pick(x){return (x&&typeof x==="object"&&!Array.isArray(x)&&("es" in x||"en" in x))?(x[lang]!=null?x[lang]:(x.es!=null?x.es:x.en)):x;}
 function both(x){return x&&x.es?x.es+" "+x.en:x;}
@@ -2255,7 +2261,7 @@ trayItems.addEventListener("click",e=>{const b=e.target.closest("button[data-rm]
 });
 trayGo.addEventListener("click",()=>{ if(compareSet.length>=2) openCompare(); });
 
-let uPref=null;
+let uPref=(function(){ const s=prefGet("cal-unit"); return (s==="imp"||s==="m")?s:null; })();
 function uNow(){ return uPref!=null?uPref:((typeof lang!=='undefined'&&lang==='en')?'imp':'m'); }
 function openCompare(){
   curCompare=true;curDetail=null;
@@ -2328,7 +2334,7 @@ function openCompare(){
 
     </div>`;
   document.getElementById("xbtn").addEventListener("click",closeDetail);
-  panel.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===uNow())return; const sc=panel.scrollTop; uPref=nu; openCompare(); panel.scrollTop=sc; }));
+  panel.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===uNow())return; const sc=panel.scrollTop; uPref=nu; prefSet('cal-unit',nu); openCompare(); panel.scrollTop=sc; }));
   ov.classList.add("on"); document.body.style.overflow="hidden"; panel.scrollTop=0;
 }
 
@@ -3315,7 +3321,7 @@ function renderFichaLoads(cart){
   }
   wrap.innerHTML=html;
   const b=document.getElementById('fLoadBtn'); if(b) b.addEventListener('click',function(){ fLoadOpen=!fLoadOpen; renderFichaLoads(cart); });
-  wrap.querySelectorAll('.labmbtn[data-fu]').forEach(function(el){ el.addEventListener('click',function(ev){ const nu=ev.target.dataset.fu; if(nu===uNow())return; uPref=nu; renderFichaLoads(cart); }); });
+  wrap.querySelectorAll('.labmbtn[data-fu]').forEach(function(el){ el.addEventListener('click',function(ev){ const nu=ev.target.dataset.fu; if(nu===uNow())return; uPref=nu; prefSet('cal-unit',nu); renderFichaLoads(cart); }); });
 }
 function atmosFromState(){ var h=(labState&&labState.alt)||0, t=(labState&&labState.temp!=null)?labState.temp:15; var P=101325*Math.pow(1-2.25577e-5*h,5.25588); var TK=t+273.15; return {rho:P/(287.058*TK), asnd:20.0468*Math.sqrt(TK)}; }
 function dopeTable(s,U,en,windMs,maxR){
@@ -3406,7 +3412,7 @@ function renderLab(){
   const zl=document.getElementById("labzero"); if(zl)zl.addEventListener("change",e=>{labState.zero=parseFloat(e.target.value); rrLab();});
   panellab.querySelectorAll(".labmbtn[data-m]").forEach(el=>el.addEventListener("click",e=>{labState.metric=e.target.dataset.m; renderLab();}));
   panellab.querySelectorAll(".labmbtn[data-sc]").forEach(el=>el.addEventListener("click",e=>{labState.scale=e.target.dataset.sc; renderLab();}));
-  panellab.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===labState.unit)return; const sc=panellab.scrollTop; uPref=nu; labState.unit=nu; labState.unitManual=true; labState.dist=nu==='imp'?182.88:200; labState.zero=nu==='imp'?91.44:100; renderLab(); panellab.scrollTop=sc;}));
+  panellab.querySelectorAll(".labmbtn[data-u]").forEach(el=>el.addEventListener("click",e=>{ const nu=e.target.dataset.u; if(nu===labState.unit)return; const sc=panellab.scrollTop; uPref=nu; prefSet('cal-unit',nu); labState.unit=nu; labState.unitManual=true; labState.dist=nu==='imp'?182.88:200; labState.zero=nu==='imp'?91.44:100; renderLab(); panellab.scrollTop=sc;}));
   const tb=document.getElementById("labtbtn"); if(tb)tb.addEventListener("click",()=>{ labState.showTables=!labState.showTables; rrLab(); });
   const db=document.getElementById("labdbtn"); if(db)db.addEventListener("click",()=>{ labState.showDope=!labState.showDope; rrLab(); });
   const wd=document.getElementById("labwind"); if(wd)wd.addEventListener("change",e=>{ const v=parseFloat(e.target.value); if(!isNaN(v)&&v>=0){ labState.wind = labState.unit==='imp'? v*0.44704 : v/3.6; } rrLab(); });
@@ -3538,7 +3544,7 @@ function renderCalc(){
   panelcalc.querySelectorAll(".labmbtn[data-cm]").forEach(el=>el.addEventListener("click",e=>{calcState.mode=e.target.dataset.cm; renderCalc();}));
   panelcalc.querySelectorAll(".labmbtn[data-csort]").forEach(el=>el.addEventListener("click",e=>{calcState.sort=e.target.dataset.csort; rrCalc();}));
   panelcalc.querySelectorAll(".calclink").forEach(el=>el.addEventListener("click",()=>{ const cart=el.dataset.cart; const idx=C.findIndex(c=>c.n===cart); if(idx>=0){ closeCalc(); openDetail(idx,true); } }));
-  panelcalc.querySelectorAll(".labmbtn[data-cu]").forEach(el=>el.addEventListener("click",e=>{const nu=e.target.dataset.cu; if(nu===calcState.unit)return; const sc=panelcalc.scrollTop; uPref=nu; calcState.unit=nu; calcState.unitManual=true; calcState.distM=nu==='imp'?182.88:200; calcState.zeroM=nu==='imp'?91.44:100; renderCalc(); panelcalc.scrollTop=sc;}));
+  panelcalc.querySelectorAll(".labmbtn[data-cu]").forEach(el=>el.addEventListener("click",e=>{const nu=e.target.dataset.cu; if(nu===calcState.unit)return; const sc=panelcalc.scrollTop; uPref=nu; prefSet('cal-unit',nu); calcState.unit=nu; calcState.unitManual=true; calcState.distM=nu==='imp'?182.88:200; calcState.zeroM=nu==='imp'?91.44:100; renderCalc(); panelcalc.scrollTop=sc;}));
   panelcalc.querySelectorAll(".gamerow").forEach(el=>el.addEventListener("click",()=>{ calcState.threshJ=+el.dataset.j; if(calcState.mode!=='energy'&&calcState.mode!=='range')calcState.mode='energy'; rrCalc(); }));
   const cd=document.getElementById("calcdist"); if(cd){cd.addEventListener("input",e=>{const v=document.getElementById("calcdistv"); if(v)v.textContent=e.target.value+' '+U.distU;}); cd.addEventListener("change",e=>{calcState.distM=unitset(calcState.unit).toM(+e.target.value); rrCalc();});}
   const ct=document.getElementById("calcthr"); if(ct)ct.addEventListener("change",e=>{ let val=parseFloat(e.target.value)||0; calcState.threshJ=calcState.unit==='imp'?val/0.737562:val; rrCalc(); });
@@ -3595,6 +3601,7 @@ var _calcBtn=document.querySelector('.guidebtn[data-g="calc"]'); if(_calcBtn)_ca
 
 function setLang(l){
   lang=l;
+  prefSet("cal-lang",l);
   document.body.dataset.lang=l;
   document.documentElement.lang=l;
   document.querySelectorAll(".langtog button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===l));});
@@ -3648,6 +3655,32 @@ if(location.search.indexOf("debug")>=0){(function(){var K=0.00006479891,bad=[];
 })();}
 </script>
 
-<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<script>
+if('serviceWorker' in navigator){
+  var updShown=false;
+  function showUpd(){
+    if(updShown)return; updShown=true;
+    var en=(typeof lang!=='undefined'&&lang==='en');
+    var d=document.createElement('div'); d.className='upd-toast';
+    d.innerHTML='<span>'+(en?'New version ready':'Nueva versi\u00f3n lista')+'</span><button class="upd-go">'+(en?'Update':'Actualizar')+'</button><button class="upd-x" aria-label="Cerrar">\u00d7</button>';
+    document.body.appendChild(d);
+    requestAnimationFrame(function(){d.classList.add('on');});
+    d.querySelector('.upd-go').addEventListener('click',function(){ location.reload(); });
+    d.querySelector('.upd-x').addEventListener('click',function(){ d.classList.remove('on'); setTimeout(function(){d.remove();},250); updShown=false; });
+  }
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      if(reg.waiting && navigator.serviceWorker.controller) showUpd();
+      reg.addEventListener('updatefound',function(){
+        var nw=reg.installing; if(!nw)return;
+        nw.addEventListener('statechange',function(){
+          if((nw.state==='installed'||nw.state==='activated') && navigator.serviceWorker.controller) showUpd();
+        });
+      });
+      document.addEventListener('visibilitychange',function(){ if(!document.hidden) reg.update().catch(function(){}); });
+    }).catch(function(){});
+  });
+}
+</script>
 </body>
 </html>
